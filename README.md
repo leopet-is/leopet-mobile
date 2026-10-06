@@ -5,7 +5,6 @@
 ### Instalación
 ```sh
 npm i
-npm run postinstall
 ```
 
 ### Ejecución
