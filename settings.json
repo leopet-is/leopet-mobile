@@ -1,0 +1,12 @@
+{
+    "problems.decorations.enabled": true,
+    "explorer.decorations.badges": true,
+    "explorer.decorations.colors": true,
+
+    "eslint.enable": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact"
+    ],
+    "eslint.lintTask.enable": true
+}

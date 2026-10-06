@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "LEOPET",
+    "slug": "APP",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/48.png",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.leopet.leopet",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/1024.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.leopet.leopet",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./src/assets/48.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "895e4f1e-47be-4dd9-9b0b-801f5bec7b51"
+      }
+    },
+    "plugins": [
+      "expo-font",
+      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./src/assets/1284.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ]
+  }
+}
