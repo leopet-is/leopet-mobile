@@ -3,6 +3,7 @@
     "name": "LEOPET",
     "slug": "APP",
     "version": "1.0.0",
+    "owner": "leopet.org",
     "orientation": "portrait",
     "icon": "./src/assets/48.png",
     "updates": {
@@ -31,7 +32,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "895e4f1e-47be-4dd9-9b0b-801f5bec7b51"
+        "projectId": "d0f24cae-9520-4d39-8802-98f92e09b145"
       }
     },
     "plugins": [
