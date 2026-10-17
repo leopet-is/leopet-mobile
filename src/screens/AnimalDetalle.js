@@ -37,7 +37,7 @@ const AnimalDetalle = ({ route, navigation }) => {
     galeria,
   } = route.params;
 
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
   const [manadas, setManadas] = useState([]);
   const [isLoading, setLoading] = useState();
 

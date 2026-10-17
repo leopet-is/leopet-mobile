@@ -30,7 +30,7 @@ import styled from 'styled-components/native';
 import { GLOBALCONFIG } from '../Config';
 
 const Home = ({ navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   // Varibles
   const [animals, setAnimals] = useState([]);

@@ -25,7 +25,7 @@ import styled from 'styled-components/native';
 import { GLOBALCONFIG } from '../Config';
 
 const FundacionScreen = ({ navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   // Varibles
   const [fundaciones, setFundaciones] = useState([]);

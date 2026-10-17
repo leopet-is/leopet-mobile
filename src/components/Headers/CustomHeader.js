@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBALCONFIG } from '../../Config';
 
 const CustomHeader = ({ title, color, navigation, isHome, isManada, isAnimalDetalle }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState();

@@ -43,7 +43,7 @@ import { GLOBALCONFIG } from '../Config';
 const AnimalesManada = ({ route, navigation }) => {
   const { manadaId, nombre, galeriamanada, monto, apadrinados, prueba } = route.params;
 
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [animals, setAnimals] = useState([]);
   const [error, setError] = useState(false);

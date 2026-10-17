@@ -31,7 +31,7 @@ import { GLOBALCONFIG } from '../Config';
 
 const Confirmacion = ({ route, navigation }) => {
   const { animalId, nombre, descripcion, imagen, fundacion, manadaId, raza, especie, galeria } = route.params;
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState();

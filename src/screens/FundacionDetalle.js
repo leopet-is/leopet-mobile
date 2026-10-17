@@ -17,7 +17,7 @@ import { GLOBALCONFIG } from '../Config';
 
 const FundacionDetalle = ({ route, navigation }) => {
   const { nombre, fundacionId, logo, email, telefono, contacto } = route.params;
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [animals, setAnimals] = useState([]);
   const [isLoading, setLoading] = useState(true);

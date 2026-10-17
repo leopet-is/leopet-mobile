@@ -41,7 +41,7 @@ import { GLOBALCONFIG } from '../Config';
 
 const AddAnimal = ({ route, navigation }) => {
   const { animalId, nombre, descripcion, imagen, fundacion, raza, especie, galeria } = route.params;
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [manadas, setManadas] = useState([]);
   const [error, setError] = useState(false);

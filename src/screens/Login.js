@@ -22,11 +22,8 @@ import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 
 import {
   StyledSafeAreaLogin,
-  StyledContainer,
   InnerContainer,
   PageLogo,
-  PageTitle,
-  Subtitle,
   StyledFormArea,
   StyledTextInput,
   StyledInputLabel,
@@ -50,45 +47,41 @@ LogBox.ignoreLogs(['Require cycle:']);
 const Login = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const passwordInputRef = useRef(null);
 
   const uri = GLOBALCONFIG.EndpointBackHost;
 
-  const _storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('session', jsonValue);
-    } catch (error) {
-      setError(true);
-    }
-  };
-
-  const iniciarSesion = ({ correo, contrasenia, nombres, tipoLogin }) => {
+  const iniciarSesion = async ({ correo, contrasenia }) => {
     setLoading(true);
-    login(
-      {
-        correo,
-        contrasenia,
-        nombres,
-        tipoLogin,
-      },
-      {
-        apiUrl: uri,
-      },
-    )
-      .then((user) => {
-        _storeData(user);
-        setLoading(false);
-        navigation.navigate('Welcome');
-        setError(false);
-        console.log('Login!');
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setError(err?.message || 'Server Error');
-        setLoading(false);
-      });
+    setError('');
+    try {
+      const user = await login(
+        {
+          correo: correo.trim(),
+          contrasenia,
+        },
+        {
+          apiUrl: uri,
+        },
+      );
+      try {
+        await AsyncStorage.setItem('session', JSON.stringify(user));
+      } catch (storageError) {
+        throw new Error('No pudimos guardar tu sesión en este dispositivo. Inténtalo de nuevo.', {
+          cause: storageError,
+        });
+      }
+      navigation.navigate('Welcome');
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'No se pudo iniciar sesión. Inténtalo de nuevo.',
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -100,12 +93,25 @@ const Login = ({ navigation }) => {
             <PageLogo resizeMode="cover" source={require('../assets/img/logo.png')} />
             <Formik
               initialValues={{ correo: '', contrasenia: '' }}
-              onSubmit={(values, handleReset) => {
-                iniciarSesion(values);
-                handleReset;
+              validate={({ correo, contrasenia }) => {
+                const errors = {};
+                const trimmedEmail = correo.trim();
+
+                if (!trimmedEmail) {
+                  errors.correo = 'Ingresa tu correo electrónico.';
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+                  errors.correo = 'Ingresa un correo electrónico válido.';
+                }
+
+                if (!contrasenia) {
+                  errors.contrasenia = 'Ingresa tu contraseña.';
+                }
+
+                return errors;
               }}
+              onSubmit={iniciarSesion}
             >
-              {({ handleChange, handleBlur, handleSubmit, values }) => (
+              {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                 <StyledFormArea>
                   <MyTextImput
                     label="Correo"
@@ -116,9 +122,12 @@ const Login = ({ navigation }) => {
                     onBlur={handleBlur('correo')}
                     value={values.correo}
                     keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     onSubmitEditing={() => passwordInputRef.current?.focus()}
-
+                    returnKeyType="next"
                   />
+                  {touched.correo && errors.correo && <MsgBox>{errors.correo}</MsgBox>}
                   <MyTextImput
                     ref={passwordInputRef}
                     label="Contraseña"
@@ -133,10 +142,11 @@ const Login = ({ navigation }) => {
                     hidePassword={hidePassword}
                     setHidePassword={setHidePassword}
                     returnKeyType="done"
-
+                    onSubmitEditing={handleSubmit}
                   />
+                  {touched.contrasenia && errors.contrasenia && <MsgBox>{errors.contrasenia}</MsgBox>}
 
-                  {error && <MsgBox>Usuario o Contraseña son incorrectos</MsgBox>}
+                  {error ? <MsgBox>{error}</MsgBox> : null}
 
                   <ExtraViewLeft>
                     <TextLink
@@ -148,7 +158,11 @@ const Login = ({ navigation }) => {
                     </TextLink>
                   </ExtraViewLeft>
 
-                  <StyledButton onPress={handleSubmit} style={{ backgroundColor: Colors.greenPet }}>
+                  <StyledButton
+                    onPress={handleSubmit}
+                    disabled={loading}
+                    style={{ backgroundColor: Colors.greenPet, opacity: loading ? 0.7 : 1 }}
+                  >
                     <ButtonText>
                       {loading ? <ActivityIndicator size="large" color={Colors.darklight} /> : 'Ingresar'}
                     </ButtonText>
@@ -174,14 +188,14 @@ const Login = ({ navigation }) => {
   );
 };
 
-const MyTextImput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+const MyTextImput = React.forwardRef(({ label, icon, isPassword, hidePassword, setHidePassword, ...props }, ref) => {
   return (
     <View>
       <LeftIcon>
         <Octicons name={icon} size={30} color={Colors.greenPet} />
       </LeftIcon>
       <StyledInputLabel>{label}</StyledInputLabel>
-      <StyledTextInput {...props} />
+      <StyledTextInput ref={ref} {...props} />
       {isPassword && (
         <RightIcon onPress={() => setHidePassword(!hidePassword)}>
           <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={30} color={Colors.greenPet} />
@@ -189,7 +203,7 @@ const MyTextImput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
       )}
     </View>
   );
-};
+});
 
 
 const windowHeight = Dimensions.get('window').height;

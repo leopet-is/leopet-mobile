@@ -14,7 +14,7 @@ import { GLOBALCONFIG } from '../Config';
 
 const NotificacionDetalle = ({ route, navigation }) => {
   const { notificacion } = route.params;
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [defaultRating, setdefaultRating] = useState(notificacion.calificacion || 0);
   const maxRating = [1, 2, 3, 4, 5];

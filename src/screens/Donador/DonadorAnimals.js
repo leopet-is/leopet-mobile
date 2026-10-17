@@ -25,7 +25,7 @@ export default function DonadorAnimals({ navigation }) {
     const data = jsonValue ? JSON.parse(jsonValue) : {};
     if (reset) setLoading(true);
     try {
-      const uri = `${GLOBALCONFIG.EndpointBackHost}:${GLOBALCONFIG.EndpointBackPort}`;
+      const uri = GLOBALCONFIG.EndpointBackHost;
       const result = await getAnimalsApp({ q: null, page: p, limit: 20 }, { apiUrl: uri, token: data.token });
       setAnimals(reset ? result : [...animals, ...result]);
       setHasMore(result.length === 20);

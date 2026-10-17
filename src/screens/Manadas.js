@@ -28,7 +28,7 @@ import {
 import { GLOBALCONFIG } from '../Config';
 
 const HomeScreen = ({ navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [manadas, setManadas] = useState([]);
   const [error, setError] = useState(false);

@@ -30,7 +30,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GLOBALCONFIG } from '../Config';
 
 const Suscripcion = ({ route, navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState();

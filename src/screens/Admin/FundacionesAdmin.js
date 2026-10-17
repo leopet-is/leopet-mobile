@@ -28,7 +28,7 @@ export default function FundacionesAdmin({ navigation }) {
       setLoading(true);
     }
     try {
-      const uri = `${GLOBALCONFIG.EndpointBackHost}:${GLOBALCONFIG.EndpointBackPort}`;
+      const uri = GLOBALCONFIG.EndpointBackHost;
       const result = await getFundacion({ q: null, page: p, limit: 20 }, { apiUrl: uri, token: data.token });
       setFundaciones(reset ? result : [...fundaciones, ...result]);
       setHasMore(result.length === 20);
@@ -79,7 +79,7 @@ export default function FundacionesAdmin({ navigation }) {
     const jsonValue = await AsyncStorage.getItem('session');
     const data = jsonValue ? JSON.parse(jsonValue) : {};
     try {
-      await updateFundacion({ id: item.id, aprobado: !item.aprobado }, { apiUrl: `${GLOBALCONFIG.EndpointBackHost}:${GLOBALCONFIG.EndpointBackPort}`, token: data.token });
+      await updateFundacion({ id: item.id, aprobado: !item.aprobado }, { apiUrl: GLOBALCONFIG.EndpointBackHost, token: data.token });
       // refresh
       loadFundaciones(0, true);
     } catch (err) {
@@ -99,7 +99,7 @@ export default function FundacionesAdmin({ navigation }) {
     const jsonValue = await AsyncStorage.getItem('session');
     const data = jsonValue ? JSON.parse(jsonValue) : {};
     try {
-      await deleteFundacionService(item.id, { apiUrl: `${GLOBALCONFIG.EndpointBackHost}:${GLOBALCONFIG.EndpointBackPort}`, token: data.token });
+      await deleteFundacionService(item.id, { apiUrl: GLOBALCONFIG.EndpointBackHost, token: data.token });
       loadFundaciones(0, true);
     } catch (err) {
       console.log(err);

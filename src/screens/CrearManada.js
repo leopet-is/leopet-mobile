@@ -50,7 +50,7 @@ const CrearManada = ({ route, navigation }) => {
     raza,
     especie,
   } = route.params;
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState();
 

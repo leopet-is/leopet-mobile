@@ -36,7 +36,7 @@ import {
 import { GLOBALCONFIG } from '../Config';
 
 const Suscripciontarjeta = ({ route, navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState();
 

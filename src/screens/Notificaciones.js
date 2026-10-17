@@ -15,7 +15,7 @@ import {
 import { GLOBALCONFIG } from '../Config';
 
 const Notificaciones = ({ navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost + ':' + GLOBALCONFIG.EndpointBackPort;
+  const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [isLoading, setLoading] = useState(true);
   const [notificaciones, setNotificaciones] = useState([]);
