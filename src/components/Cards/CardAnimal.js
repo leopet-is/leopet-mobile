@@ -77,37 +77,39 @@ const Animales = (props) => {
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Fundación: </Text>
-            <Text style={styles.detailValue}>{fundacion}</Text>
+            <Text style={styles.detailValue}>
+              {fundacion || (fundacion_id ? `Fundación #${fundacion_id}` : 'No disponible')}
+            </Text>
           </View>
         </View>
 
         <View style={styles.badgeContainer}>
-          {!vacunacion && (
+          {vacunacion === false && (
             <View style={[styles.badge, styles.badgeRed]}>
               <Text style={styles.badgeTextRed}>X No Vacunado</Text>
             </View>
           )}
-          {!esterilizacion && (
+          {esterilizacion === false && (
             <View style={[styles.badge, styles.badgeRed]}>
               <Text style={styles.badgeTextRed}>X No Esterilizado</Text>
             </View>
           )}
-          {vacunacion && (
+          {vacunacion === true && (
             <View style={[styles.badge, styles.badgeGreen]}>
               <Text style={styles.badgeTextGreen}>✓ Vacunado</Text>
             </View>
           )}
-          {esterilizacion && (
+          {esterilizacion === true && (
             <View style={[styles.badge, styles.badgeGreen]}>
               <Text style={styles.badgeTextGreen}>✓ Esterilizado</Text>
             </View>
           )}
-          {!desparasitacion && (
+          {desparasitacion === false && (
             <View style={[styles.badge, styles.badgeRed]}>
               <Text style={styles.badgeTextRed}>X No Desparasitado</Text>
             </View>
           )}
-          {enfermedades && enfermedades.trim() !== "" && (
+          {enfermedades && !['ninguna', 'ninguno', 'no'].includes(enfermedades.trim().toLowerCase()) && (
             <View style={[styles.badge, styles.badgeOrange]}>
               <Text style={styles.badgeTextOrange}>⚠ {enfermedades}</Text>
             </View>

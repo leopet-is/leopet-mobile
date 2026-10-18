@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animales from '../components/Cards/CardAnimal';
 import { getAnimalsFundacionApp } from '../services/Animals';
 import CustomHeader from '../components/Headers/CustomHeader';
-import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 
 import {
   StyledSafeArea,
@@ -16,33 +16,37 @@ import {
 import { GLOBALCONFIG } from '../Config';
 
 const FundacionDetalle = ({ route, navigation }) => {
-  const { nombre, fundacionId, logo, email, telefono, contacto } = route.params;
+  const { nombre, fundacionId, logo, telefono, direccion, descripcion } = route.params;
   const uri = GLOBALCONFIG.EndpointBackHost;
 
   const [animals, setAnimals] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     loadAnimals(0, true);
   }, []);
 
   const loadAnimals = async (page, reset) => {
-    const jsonValue = await AsyncStorage.getItem('session');
-    const data = await JSON.parse(jsonValue);
+    setError('');
     if (reset) setLoading(true);
 
-    return getAnimalsFundacionApp(
-      { q: null, page, id_fundacion: fundacionId, limit: 20 },
-      { apiUrl: uri, token: data.token }
-    )
-      .then((res) => {
-        setAnimals(reset ? res : [...animals, ...res]);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+    try {
+      const jsonValue = await AsyncStorage.getItem('session');
+      if (!jsonValue) throw new Error('Inicia sesión de nuevo para cargar los animales.');
+      const session = JSON.parse(jsonValue);
+      if (!session?.token) throw new Error('La sesión no es válida. Inicia sesión de nuevo.');
+
+      const result = await getAnimalsFundacionApp(
+        { page, id_fundacion: fundacionId, limit: 20 },
+        { apiUrl: uri, token: session.token },
+      );
+      setAnimals(reset ? result : [...animals, ...result]);
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : 'No se pudieron cargar los animales.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -69,20 +73,16 @@ const FundacionDetalle = ({ route, navigation }) => {
         </View>
 
         <InnerContainer style={{ paddingHorizontal: 20 }}>
-          {/* Contact Info Card */}
           <View style={styles.infoCard}>
             <View style={styles.infoRow}>
               <Feather name="phone" size={18} color={Colors.greenPet} />
               <Text style={styles.infoText}>{telefono || 'No disponible'}</Text>
             </View>
             <View style={styles.infoRow}>
-              <MaterialCommunityIcons name="email-outline" size={18} color={Colors.greenPet} />
-              <Text style={styles.infoText}>{email || 'No disponible'}</Text>
+              <Ionicons name="location-outline" size={18} color={Colors.greenPet} />
+              <Text style={styles.infoText}>{direccion || 'No disponible'}</Text>
             </View>
-            <View style={styles.infoRow}>
-              <Ionicons name="person-outline" size={18} color={Colors.greenPet} />
-              <Text style={styles.infoText}>{contacto || 'No disponible'}</Text>
-            </View>
+            {descripcion ? <Text style={styles.description}>{descripcion}</Text> : null}
           </View>
 
           {/* Animals Section */}
@@ -93,6 +93,13 @@ const FundacionDetalle = ({ route, navigation }) => {
 
           {isLoading ? (
             <ActivityIndicator size="large" color={Colors.greenPet} style={{ marginTop: 20 }} />
+          ) : error ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>{error}</Text>
+              <TouchableOpacity onPress={() => loadAnimals(0, true)} style={styles.retryButton}>
+                <Text style={styles.retryButtonText}>Reintentar</Text>
+              </TouchableOpacity>
+            </View>
           ) : animals.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No hay animales registrados aún.</Text>
@@ -165,6 +172,12 @@ const styles = StyleSheet.create({
     color: Colors.tertiary,
     marginLeft: 12,
   },
+  description: {
+    color: Colors.tertiary,
+    fontSize: 15,
+    lineHeight: 22,
+    marginTop: 4,
+  },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -184,6 +197,18 @@ const styles = StyleSheet.create({
   emptyText: {
     color: Colors.gray,
     fontSize: 16,
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: Colors.greenPet,
+    borderRadius: 18,
+    marginTop: 12,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

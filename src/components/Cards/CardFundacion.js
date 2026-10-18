@@ -5,7 +5,7 @@ import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../StyledComponents/styles';
 
 const CardFundacion = (props) => {
-  const { id, nombre, direccion, logo, telefono, email } = props;
+  const { id, nombre, direccion, logo, telefono, descripcion } = props;
 
   return (
     <Card containerStyle={styles.cardContainer}>
@@ -35,14 +35,11 @@ const CardFundacion = (props) => {
         </View>
 
         <View style={styles.detailRow}>
-          <MaterialCommunityIcons name="email-outline" size={14} color={Colors.greenPet} />
-          <Text style={styles.detailText}>{email || 'No disponible'}</Text>
-        </View>
-
-        <View style={styles.detailRow}>
           <Ionicons name="location-outline" size={14} color={Colors.greenPet} />
           <Text style={styles.detailText}>{direccion || 'No disponible'}</Text>
         </View>
+
+        {descripcion ? <Text style={styles.description}>{descripcion}</Text> : null}
       </View>
     </Card>
   );
@@ -102,6 +99,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.gray,
     marginLeft: 10,
+  },
+  description: {
+    color: Colors.tertiary,
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 8,
   },
 });
 

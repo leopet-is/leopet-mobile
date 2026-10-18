@@ -10,7 +10,7 @@ import { Divider, CheckBox } from '@rneui/themed';
 // Servicios
 // Iconos
 import { Feather } from '@expo/vector-icons';
-import { getAnimals } from '../services/Animals';
+import { getAnimalsApp } from '../services/Animals';
 
 import {
   StyledSafeArea,
@@ -34,9 +34,8 @@ const Home = ({ navigation }) => {
 
   // Varibles
   const [animals, setAnimals] = useState([]);
-  const [isLoading, setLoading] = useState();
-  const [especieAnimal, setEspecieAnimal] = useState(null);
-  const [tipoAnimal, setTipoAnimal] = useState('TODOS');
+  const [isLoading, setLoading] = useState(true);
+  const [tipoAnimal, setTipoAnimal] = useState('Todos');
 
   const [error, setError] = useState();
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,72 +49,75 @@ const Home = ({ navigation }) => {
 
   // Cargar animales al renderizar el componente
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      loadAnimals(0, true, null, 'Todos');
+    return navigation.addListener('focus', () => {
+      loadAnimals(0, true);
     });
-  }, []);
+  }, [navigation]);
 
-  const logout = async () => {
+  const handleSearch = setSearchQuery;
+
+  const loadAnimals = async (page, reset) => {
+    setError('');
+    if (reset) setLoading(true);
+
     try {
-      await AsyncStorage.removeItem('session');
-      navigation.navigate('Login');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+      const jsonValue = await AsyncStorage.getItem('session');
+      if (!jsonValue) throw new Error('Inicia sesión de nuevo para cargar los animales.');
+      const session = JSON.parse(jsonValue);
+      if (!session?.token) throw new Error('La sesión no es válida. Inicia sesión de nuevo.');
 
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    loadAnimals(0, true, null, tipoAnimal, text);
-  };
-
-  const loadAnimals = async (page, reset, cb, especie, q = null) => {
-    const jsonValue = await AsyncStorage.getItem('session');
-    const data = await JSON.parse(jsonValue);
-    if (reset) {
-      setLoading(true);
+      const result = await getAnimalsApp(
+        { limit: 20, page },
+        { apiUrl: uri, token: session.token },
+      );
+      const hasHealthData = result.some((animal) =>
+        ['vacunacion', 'esterilizacion', 'desparasitacion', 'enfermedades'].some(
+          (field) => animal[field] !== undefined && animal[field] !== null,
+        ),
+      );
+      if (reset && !hasHealthData) {
+        setNoVacunado(false);
+        setNoEsterilizado(false);
+        setNoDesparasitado(false);
+        setConEnfermedades(false);
+      }
+      setAnimals(reset ? result : [...animals, ...result]);
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : 'No se pudieron cargar los animales.');
+    } finally {
+      setLoading(false);
     }
-    return getAnimals(
-      {
-        limit: 20,
-        selectedSpecie: especie,
-        q: q || searchQuery,
-        page: page,
-      },
-      {
-        apiUrl: uri,
-        token: data.token,
-      },
-    )
-      .then((data) => {
-        setAnimals(reset ? data : [...animals, ...data]);
-        if (reset) {
-          setLoading(false);
-        }
-        if (cb) {
-          cb(data.length != 0);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err?.message || 'Server Error');
-        setLoading(false);
-      });
   };
   const getFilteredAnimals = () => {
     let filtered = animals;
 
+    if (tipoAnimal !== 'Todos') {
+      filtered = filtered.filter(
+        (animal) => animal.especie?.toUpperCase() === tipoAnimal.toUpperCase(),
+      );
+    }
+    if (searchQuery.trim()) {
+      const query = searchQuery.trim().toLowerCase();
+      filtered = filtered.filter((animal) =>
+        [animal.nombre, animal.especie, animal.raza]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(query)),
+      );
+    }
     if (noVacunado) {
-      filtered = filtered.filter(a => !a.vacunacion);
+      filtered = filtered.filter((animal) => animal.vacunacion === false);
     }
     if (noEsterilizado) {
-      filtered = filtered.filter(a => !a.esterilizacion);
+      filtered = filtered.filter((animal) => animal.esterilizacion === false);
     }
     if (noDesparasitado) {
-      filtered = filtered.filter(a => !a.desparasitacion);
+      filtered = filtered.filter((animal) => animal.desparasitacion === false);
     }
     if (conEnfermedades) {
-      filtered = filtered.filter(a => a.enfermedades && a.enfermedades.trim() !== '');
+      filtered = filtered.filter((animal) => {
+        const diseases = animal.enfermedades?.trim();
+        return diseases && !['ninguna', 'ninguno', 'no'].includes(diseases.toLowerCase());
+      });
     }
 
     return filtered;
@@ -149,6 +151,7 @@ const Home = ({ navigation }) => {
               fundacion_id: animal.fundacion_id,
               edad: animal.edad,
               peso: animal.peso,
+              fecha_nacimiento_estimada: animal.fecha_nacimiento_estimada,
               esterilizacion: animal.esterilizacion,
               vacunacion: animal.vacunacion,
               desparasitacion: animal.desparasitacion,
@@ -166,10 +169,10 @@ const Home = ({ navigation }) => {
             descripcion={animal.descripcion}
             imagen={animal.imagen}
             fundacion={animal.fundacion}
+            fundacion_id={animal.fundacion_id}
             navigation={navigation}
             raza={animal.raza}
             especie={animal.especie}
-            fundacion_id={animal.fundacion_id}
             isMenuManada={false}
             edad={animal.edad}
             peso={animal.peso}
@@ -189,16 +192,13 @@ const Home = ({ navigation }) => {
 
   function cargarTodos() {
     setTipoAnimal('Todos');
-    loadAnimals(0, true, null, 'Todos');
   }
   function cargarPerros() {
     setTipoAnimal('Perro');
-    loadAnimals(0, true, null, 'Perro');
   }
 
   function cargarGatos() {
     setTipoAnimal('Gato');
-    loadAnimals(0, true, null, 'Gato');
   }
 
   return (
@@ -207,17 +207,17 @@ const Home = ({ navigation }) => {
       <ViewFiltro>
         <ViewFiltroButton>
           <TouchableOpacity
-            style={tipoAnimal == 'TODOS' ? styles.filtroButtonPresionado : styles.filtroButton}
+            style={tipoAnimal === 'Todos' ? styles.filtroButtonPresionado : styles.filtroButton}
             onPress={cargarTodos}
           >
-            <Text style={tipoAnimal == 'TODOS' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
+            <Text style={tipoAnimal === 'Todos' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
               Todos
             </Text>
           </TouchableOpacity>
         </ViewFiltroButton>
         <ViewFiltroButton>
           <TouchableOpacity
-            style={tipoAnimal == 'Perro' ? styles.filtroButtonPresionado : styles.filtroButton}
+            style={tipoAnimal === 'Perro' ? styles.filtroButtonPresionado : styles.filtroButton}
             onPress={cargarPerros}
           >
             <Text style={tipoAnimal == 'Perro' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
@@ -227,7 +227,7 @@ const Home = ({ navigation }) => {
         </ViewFiltroButton>
         <ViewFiltroButton>
           <TouchableOpacity
-            style={tipoAnimal == 'Gato' ? styles.filtroButtonPresionado : styles.filtroButton}
+            style={tipoAnimal === 'Gato' ? styles.filtroButtonPresionado : styles.filtroButton}
             onPress={cargarGatos}
           >
             <Text style={tipoAnimal == 'Gato' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
@@ -257,12 +257,22 @@ const Home = ({ navigation }) => {
       {showHealthFilters && (
         <View style={styles.healthFiltersContainer}>
           <Text style={styles.healthFiltersTitle}>Filtrar por Salud</Text>
+          {!animals.some((animal) =>
+            ['vacunacion', 'esterilizacion', 'desparasitacion', 'enfermedades'].some(
+              (field) => animal[field] !== undefined && animal[field] !== null,
+            ),
+          ) && (
+            <Text style={styles.healthFiltersNote}>
+              El listado no incluye datos de salud, por lo que estos filtros no están disponibles.
+            </Text>
+          )}
           <View style={styles.checkboxGrid}>
             <View style={styles.checkboxWrapper}>
               <CheckBox
                 title="No Vacunados"
                 checked={noVacunado}
                 onPress={() => setNoVacunado(!noVacunado)}
+                disabled={!animals.some((animal) => animal.vacunacion !== undefined && animal.vacunacion !== null)}
                 containerStyle={styles.checkboxContainer}
                 textStyle={styles.checkboxText}
                 checkedColor={Colors.greenPet}
@@ -273,6 +283,7 @@ const Home = ({ navigation }) => {
                 title="No Esterilizados"
                 checked={noEsterilizado}
                 onPress={() => setNoEsterilizado(!noEsterilizado)}
+                disabled={!animals.some((animal) => animal.esterilizacion !== undefined && animal.esterilizacion !== null)}
                 containerStyle={styles.checkboxContainer}
                 textStyle={styles.checkboxText}
                 checkedColor={Colors.greenPet}
@@ -283,6 +294,7 @@ const Home = ({ navigation }) => {
                 title="No Desparasitados"
                 checked={noDesparasitado}
                 onPress={() => setNoDesparasitado(!noDesparasitado)}
+                disabled={!animals.some((animal) => animal.desparasitacion !== undefined && animal.desparasitacion !== null)}
                 containerStyle={styles.checkboxContainer}
                 textStyle={styles.checkboxText}
                 checkedColor={Colors.greenPet}
@@ -293,6 +305,7 @@ const Home = ({ navigation }) => {
                 title="Con Enfermedades"
                 checked={conEnfermedades}
                 onPress={() => setConEnfermedades(!conEnfermedades)}
+                disabled={!animals.some((animal) => animal.enfermedades !== undefined && animal.enfermedades !== null)}
                 containerStyle={styles.checkboxContainer}
                 textStyle={styles.checkboxText}
                 checkedColor={Colors.greenPet}
@@ -301,7 +314,7 @@ const Home = ({ navigation }) => {
           </View>
           <TouchableOpacity
             style={styles.filterSubmitButton}
-            onPress={() => loadAnimals(0, true, null, tipoAnimal)}
+            onPress={() => setShowHealthFilters(false)}
           >
             <Feather name="filter" size={16} color="white" />
             <Text style={styles.filterSubmitText}>Filtrar</Text>
@@ -314,7 +327,18 @@ const Home = ({ navigation }) => {
           {/* <PageTitle>LEOPET</PageTitle>
           <TextInfo>En esta sección encontrarás a los animales que están registrados por diversas Fundaciones</TextInfo> */}
 
-          {isLoading ? <ActivityIndicator size="large" color={Colors.greenPet} style={{ marginTop: 20 }} /> : loadAnimal(navigation)}
+          {isLoading ? (
+            <ActivityIndicator size="large" color={Colors.greenPet} style={{ marginTop: 20 }} />
+          ) : error ? (
+            <View style={{ marginTop: 30, alignItems: 'center' }}>
+              <Text style={{ color: Colors.red, textAlign: 'center' }}>{error}</Text>
+              <TouchableOpacity style={styles.filterSubmitButton} onPress={() => loadAnimals(0, true)}>
+                <Text style={styles.filterSubmitText}>Reintentar</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            loadAnimal(navigation)
+          )}
           {/* {isTipoAnimal ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadTipoAnimal(navigation,especieAnimal)} */}
           {/*  <StyledButtonMedio onPress={logout}>
             <ButtonText>Logout</ButtonText>
@@ -383,6 +407,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: Colors.tertiary,
+    marginBottom: 10,
+  },
+  healthFiltersNote: {
+    color: Colors.gray,
+    fontSize: 13,
     marginBottom: 10,
   },
   checkboxGrid: {

@@ -50,7 +50,7 @@ export default function FundacionesAdmin({ navigation }) {
         logo={item.logo}
         direccion={item.direccion}
         telefono={item.telefono}
-        email={item.user?.email}
+        descripcion={item.descripcion}
       />
       <View style={styles.actionsRow}>
         <TouchableOpacity

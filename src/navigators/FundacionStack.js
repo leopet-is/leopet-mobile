@@ -10,6 +10,7 @@ import CrearManada from '../screens/CrearManada';
 import FundacionScreen from '../screens/FundacionScreen';
 import AnimalesManada from '../screens/AnimalesManada';
 import FundacionDetalle from '../screens/FundacionDetalle';
+import AnimalDetalle from '../screens/AnimalDetalle';
 
 //Colors
 import { Colors } from '../components/StyledComponents/styles';
@@ -35,6 +36,7 @@ const FundacionStack = () => {
     >
       <Stack.Screen name="Fundaciones" component={FundacionScreen} />
       <Stack.Screen name="Detalle de Fundacion" component={FundacionDetalle} />
+      <Stack.Screen name="Detalle de Animal" component={AnimalDetalle} />
       {/* <Stack.Screen
         options={{
           headerShown: true,

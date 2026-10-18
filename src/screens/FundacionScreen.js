@@ -83,10 +83,10 @@ const FundacionScreen = ({ navigation }) => {
             navigation.navigate('Detalle de Fundacion', {
               fundacionId: fundacion.id,
               nombre: fundacion.nombre,
+              descripcion: fundacion.descripcion,
               logo: fundacion.logo,
-              email: fundacion.user.email,
               telefono: fundacion.telefono,
-              contacto: fundacion.user.nombres + ' ' + fundacion.user.apellidos,
+              direccion: fundacion.direccion,
             })
           }
         >
@@ -96,7 +96,7 @@ const FundacionScreen = ({ navigation }) => {
             logo={fundacion.logo}
             direccion={fundacion.direccion}
             telefono={fundacion.telefono}
-            email={fundacion.user.email}
+            descripcion={fundacion.descripcion}
           />
         </TouchableOpacity>
       );

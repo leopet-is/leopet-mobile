@@ -25,7 +25,8 @@ const AnimalDetalle = ({ route, navigation }) => {
     descripcion,
     imagen,
     fundacion,
-    edad,
+    fundacion_id,
+    fecha_nacimiento_estimada,
     peso,
     esterilizacion,
     vacunacion,
@@ -36,6 +37,7 @@ const AnimalDetalle = ({ route, navigation }) => {
     sexo,
     galeria,
   } = route.params;
+  const edad = getAge(fecha_nacimiento_estimada);
 
   const uri = GLOBALCONFIG.EndpointBackHost;
   const [manadas, setManadas] = useState([]);
@@ -97,10 +99,13 @@ const AnimalDetalle = ({ route, navigation }) => {
           <View style={styles.infoGrid}>
             <InfoItem label="Especie" value={especie} />
             <InfoItem label="Raza" value={raza} />
-            <InfoItem label="Edad" value={`${edad} años`} />
-            <InfoItem label="Sexo" value={sexo == 1 ? 'Macho' : 'Hembra'} />
-            <InfoItem label="Fundación" value={fundacion} />
-            <InfoItem label="Peso" value={`${peso} Kg`} />
+            <InfoItem label="Edad" value={edad} />
+            <InfoItem label="Sexo" value={getSexLabel(sexo)} />
+            <InfoItem
+              label="Fundación"
+              value={fundacion || (fundacion_id ? `Fundación #${fundacion_id}` : 'No disponible')}
+            />
+            <InfoItem label="Peso" value={peso ? `${peso} Kg` : 'No disponible'} />
           </View>
 
           <View style={styles.sectionHeader}>
@@ -128,7 +133,7 @@ const AnimalDetalle = ({ route, navigation }) => {
 
           <View style={styles.historyBox}>
             <Text style={styles.boxLabel}>Rescatado el:</Text>
-            <Text style={styles.boxText}>{fecha_rescate}</Text>
+            <Text style={styles.boxText}>{fecha_rescate || 'No disponible'}</Text>
             <Text style={[styles.boxLabel, { marginTop: 10 }]}>Descripción:</Text>
             <Text style={styles.boxText}>{descripcion}</Text>
           </View>
@@ -146,12 +151,60 @@ const InfoItem = ({ label, value }) => (
   </View>
 );
 
+const getAge = (birthDate) => {
+  if (!birthDate) return 'No disponible';
+  const birth = new Date(`${birthDate}T00:00:00`);
+  if (Number.isNaN(birth.getTime())) return 'No disponible';
+
+  const today = new Date();
+  let years = today.getFullYear() - birth.getFullYear();
+  const hasHadBirthdayThisYear =
+    today.getMonth() > birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
+  if (!hasHadBirthdayThisYear) years -= 1;
+
+  return `${years} ${years === 1 ? 'año' : 'años'}`;
+};
+
+const getSexLabel = (sex) => {
+  if (sex === 'MACHO' || sex === 1 || sex === '1') return 'Macho';
+  if (sex === 'HEMBRA' || sex === 2 || sex === '2') return 'Hembra';
+  return 'No disponible';
+};
+
 const StatusItem = ({ label, status }) => (
   <View style={styles.infoItem}>
     <Text style={styles.infoLabel}>{label}</Text>
-    <View style={[styles.statusBadge, { backgroundColor: status == 1 ? '#D1FAE5' : '#FEE2E2' }]}>
-      <Text style={{ color: status == 1 ? '#065F46' : '#991B1B', fontSize: 12, fontWeight: 'bold' }}>
-        {status == 1 ? '✓ Sí' : '✗ No'}
+    <View
+      style={[
+        styles.statusBadge,
+        {
+          backgroundColor:
+            status === true || status === 1
+              ? '#D1FAE5'
+              : status === false || status === 0
+                ? '#FEE2E2'
+                : '#E5E7EB',
+        },
+      ]}
+    >
+      <Text
+        style={{
+          color:
+            status === true || status === 1
+              ? '#065F46'
+              : status === false || status === 0
+                ? '#991B1B'
+                : Colors.gray,
+          fontSize: 12,
+          fontWeight: 'bold',
+        }}
+      >
+        {status === true || status === 1
+          ? '✓ Sí'
+          : status === false || status === 0
+            ? '✗ No'
+            : 'No disponible'}
       </Text>
     </View>
   </View>
