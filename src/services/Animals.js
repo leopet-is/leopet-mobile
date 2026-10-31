@@ -25,7 +25,7 @@ export async function getAnimals(props, { apiUrl, token }) {
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -50,7 +50,7 @@ export async function getAnimalsApp(props, { apiUrl, token }) {
       },
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -78,7 +78,7 @@ export async function getAnimalsFundacionApp(props, { apiUrl, token }) {
       },
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {

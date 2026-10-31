@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity, Alert  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBALCONFIG } from '../../Config';
-import { updateFundacion, deleteFundacionService } from '../../services/Fundacion';
-import { Alert } from 'react-native';
+import { updateFundacion, deleteFundacionService, getFundacion  } from '../../services/Fundacion';
+
 import { Colors } from '../../components/StyledComponents/styles';
-import { getFundacion } from '../../services/Fundacion';
+
 import FundacionCard from '../../components/Cards/CardFundacion';
 
 export default function FundacionesAdmin({ navigation }) {

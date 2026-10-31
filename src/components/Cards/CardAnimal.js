@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card } from '@rneui/themed';
 import { View, TouchableOpacity, ActivityIndicator, StyleSheet, Image, Text } from 'react-native';
 import { Ionicons, Octicons } from '@expo/vector-icons';

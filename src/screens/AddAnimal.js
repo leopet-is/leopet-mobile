@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, TouchableOpacity, Text, Modal } from 'react-native';
-import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@rneui/themed';
 
@@ -13,28 +12,14 @@ import { getManadas } from '../services/Manada';
 // Header
 import CustomHeader from '../components/Headers/CustomHeader';
 // Icons
-import { Octicons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
   PageTitle,
-  Subtitle,
-  StyledFormArea,
-  StyledTextInput,
-  StyledInputLabel,
-  LeftIcon,
-  RightIcon,
-  StyledButton,
   StyledButtonMedio,
-  ButtonText,
-  MsgBox,
-  ExtraViewMargin,
-  ExtraText,
-  TextLink,
-  TextLinkContent,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 import { GLOBALCONFIG } from '../Config';
@@ -177,7 +162,13 @@ const AddAnimal = ({ route, navigation }) => {
             </Card>
           </TouchableOpacity>
 
-          {isLoading ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadManada()}
+          {isLoading ? (
+            <ActivityIndicator size="large" color={Colors.darklight} />
+          ) : error ? (
+            <Text style={{ color: Colors.red, textAlign: 'center', margin: 20 }}>{error}</Text>
+          ) : (
+            loadManada()
+          )}
           <View style={{ flexDirection: 'row', justifyContent: 'center', backgroundColor: Colors.beige }}></View>
           <View style={{ marginBottom: 30 }}></View>
         </InnerContainer>

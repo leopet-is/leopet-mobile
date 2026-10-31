@@ -67,7 +67,7 @@ const Signup = ({ navigation }) => {
     };
 
     register({ user: userPayload }, { apiUrl: uri })
-      .then((response) => {
+      .then(() => {
         setLoading(false);
         navigation.navigate('Login');
       })
@@ -113,7 +113,7 @@ const Signup = ({ navigation }) => {
             >
 
 
-              {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+              {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
                 <StyledFormArea>
                   <MyTextInput
                     label="Cédula"

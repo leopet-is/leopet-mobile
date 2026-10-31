@@ -1,48 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Badge, Icon } from '@rneui/themed';
+import { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { Badge } from '@rneui/themed';
 import { HeaderView, Colors } from '../StyledComponents/styles';
 import { Ionicons } from '@expo/vector-icons';
-// import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { getNotificaciones } from '../../services/Notificaciones';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBALCONFIG } from '../../Config';
 
-const CustomHeader = ({ title, color, navigation, isHome, isManada, isAnimalDetalle }) => {
+const CustomHeader = ({ navigation, isHome, isAnimalDetalle }) => {
   const uri = GLOBALCONFIG.EndpointBackHost;
 
-  const [error, setError] = useState(false);
-  const [isLoading, setLoading] = useState();
-  const [notificaciones, setNotificaciones] = useState([]);
-  const [totalNotificacionesNoleidas, setTotalNotificacionesNoleidas] = useState();
+  const [totalNotificacionesNoleidas, setTotalNotificacionesNoleidas] = useState(0);
+
+  const loadNotificaciones = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('session');
+      const data = JSON.parse(jsonValue);
+      if (data?.token) {
+        const response = await getNotificaciones({
+          apiUrl: uri,
+          token: data.token,
+        });
+        const result = (response?.notificaciones || []).filter((notificacion) => notificacion.leido == false);
+        setTotalNotificacionesNoleidas(result.length);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      loadNotificaciones(0, true);
+      loadNotificaciones();
     });
-  }, []);
 
-  const loadNotificaciones = async (page, reset, cb) => {
-    const jsonValue = await AsyncStorage.getItem('session');
-    const data = await JSON.parse(jsonValue);
-    if (reset) {
-      setLoading(true);
-    }
-    return getNotificaciones({
-      apiUrl: uri,
-      token: data.token,
-    })
-      .then((data) => {
-        setNotificaciones(data.notificaciones);
-        const result = data.notificaciones.filter((notificacion) => notificacion.leido == false);
-        setTotalNotificacionesNoleidas(result.length);
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err?.message || 'Server Error');
-        setLoading(false);
-      });
-  };
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <HeaderView style={{ justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 15 }}>
@@ -84,18 +77,6 @@ const CustomHeader = ({ title, color, navigation, isHome, isManada, isAnimalDeta
       </View>
     </HeaderView>
   );
-};
-
-const styles = StyleSheet.create({
-  imagen: {
-    width: 35,
-    height: 35,
-    top: 0,
-  },
-});
-
-const click = () => {
-  alert('prueba');
 };
 
 export default CustomHeader;

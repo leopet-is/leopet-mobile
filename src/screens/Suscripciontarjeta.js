@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, Text } from 'react-native';
-import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Formik para el Formulario
@@ -13,29 +12,25 @@ import { createManada } from '../services/Manada';
 // Header
 import CustomHeader from '../components/Headers/CustomHeader';
 // Icons
-import { Octicons, Ionicons } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 
 // Styled Components
 import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
-  Subtitle,
   StyledFormArea,
   StyledTextInput,
   StyledInputLabel,
   LeftIcon,
-  StyledButton,
   StyledButtonMedio,
   ButtonText,
   MsgBox,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 import { GLOBALCONFIG } from '../Config';
 
-const Suscripciontarjeta = ({ route, navigation }) => {
+const Suscripciontarjeta = ({ navigation }) => {
   const uri = GLOBALCONFIG.EndpointBackHost;
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState();
@@ -80,7 +75,7 @@ const Suscripciontarjeta = ({ route, navigation }) => {
               createNewManada(values);
             }}
           >
-            {({ handleChange, handleBlur, handleSubmit, values }) => (
+            {({ handleChange, handleBlur, values }) => (
               <StyledFormArea>
                 <MyTextImput
                   label="Número de tarjeta*"

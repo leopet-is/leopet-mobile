@@ -1,10 +1,8 @@
-import React from 'react';
 // React Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // Navigators & Screens
-import HomeTab from './HomeTab';
 import OptionsDrawer from './OptionsDrawer';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';

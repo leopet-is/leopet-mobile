@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, Text } from 'react-native';
-import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Formik para el Formulario
@@ -20,17 +19,13 @@ import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
-  Subtitle,
   StyledFormArea,
   StyledTextInput,
   StyledInputLabel,
   LeftIcon,
-  StyledButton,
   StyledButtonMedio,
   ButtonText,
   MsgBox,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 import { GLOBALCONFIG } from '../Config';
@@ -80,7 +75,7 @@ const SuscripcionPay = ({ navigation }) => {
               createNewManada(values);
             }}
           >
-            {({ handleChange, handleBlur, handleSubmit, values }) => (
+            {({ handleChange, handleBlur, values }) => (
               <StyledFormArea>
                 <MyTextImput
                   label="Correo*"

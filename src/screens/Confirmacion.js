@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text } from 'react-native';
-import Constants from 'expo-constants';
+import { View, Text, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Services
@@ -17,13 +16,9 @@ import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
-  Subtitle,
-  StyledButton,
   ButtonText,
   StyledButtonMedio,
   StyledButtonMedioCancelar,
-  TextInfo,
   Colors,
   ExtraView,
 } from '../components/StyledComponents/styles';
@@ -94,10 +89,20 @@ const Confirmacion = ({ route, navigation }) => {
             <ButtonText>Cancelar</ButtonText>
           </StyledButtonMedioCancelar>
 
-          <StyledButtonMedio onPress={() => addManada(manadaId)}>
-            <ButtonText>Apadrinar</ButtonText>
+          <StyledButtonMedio onPress={() => addManada(manadaId)} disabled={isLoading}>
+            {isLoading ? (
+              <ActivityIndicator color={Colors.primary} />
+            ) : (
+              <ButtonText>Apadrinar</ButtonText>
+            )}
           </StyledButtonMedio>
         </View>
+
+        {error ? (
+          <Text style={{ color: Colors.red, textAlign: 'center', marginTop: 15, paddingHorizontal: 20 }}>
+            {error}
+          </Text>
+        ) : null}
 
         <View style={{ marginBottom: 30 }}></View>
       </StyledScrollContainer>

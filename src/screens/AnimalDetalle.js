@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CardManada from '../components/Cards/CardManada';
-import { getManadas } from '../services/Manada';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import CustomHeader from '../components/Headers/CustomHeader';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -11,10 +7,8 @@ import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
   Colors,
 } from '../components/StyledComponents/styles';
-import { GLOBALCONFIG } from '../Config';
 
 const AnimalDetalle = ({ route, navigation }) => {
   const {
@@ -33,35 +27,10 @@ const AnimalDetalle = ({ route, navigation }) => {
     desparasitacion,
     enfermedades,
     fecha_rescate,
-    fecha_registro,
     sexo,
     galeria,
   } = route.params;
   const edad = getAge(fecha_nacimiento_estimada);
-
-  const uri = GLOBALCONFIG.EndpointBackHost;
-  const [manadas, setManadas] = useState([]);
-  const [isLoading, setLoading] = useState();
-
-  useEffect(() => {
-    loadManadas(0, true);
-  }, []);
-
-  const loadManadas = async (page, reset) => {
-    const jsonValue = await AsyncStorage.getItem('session');
-    const data = await JSON.parse(jsonValue);
-    if (reset) setLoading(true);
-
-    return getManadas({ q: null, page, limit: 20 }, { apiUrl: uri, token: data.token })
-      .then((data) => {
-        setManadas(reset ? data : [...manadas, ...data]);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
 
   return (
     <StyledSafeArea style={{ backgroundColor: Colors.primary }}>

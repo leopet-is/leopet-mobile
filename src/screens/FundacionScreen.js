@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomHeader from '../components/Headers/CustomHeader';
-import Constants from 'expo-constants';
 import Fundacion from '../components/Cards/CardFundacion';
-import { ActivityIndicator, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, Text } from 'react-native';
 
 // Servicios
 import { getFundacion } from '../services/Fundacion';
@@ -12,16 +11,9 @@ import { getFundacion } from '../services/Fundacion';
 import {
   StyledSafeArea,
   InnerContainer,
-  PageTitle,
   StyledScrollContainer,
-  StyledButton,
-  StyledButtonMedio,
-  ButtonText,
-  TextInfo,
   Colors,
-  ExtraView,
 } from '../components/StyledComponents/styles';
-import styled from 'styled-components/native';
 import { GLOBALCONFIG } from '../Config';
 
 const FundacionScreen = ({ navigation }) => {
@@ -30,8 +22,6 @@ const FundacionScreen = ({ navigation }) => {
   // Varibles
   const [fundaciones, setFundaciones] = useState([]);
   const [isLoading, setLoading] = useState();
-  const [isTipoAnimal, setTipoAnimal] = useState(false);
-  const [especieAnimal, setEspecieAnimal] = useState(null);
   const [error, setError] = useState();
 
   // Cargar animales al renderizar el componente
@@ -39,7 +29,8 @@ const FundacionScreen = ({ navigation }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       loadFundaciones(0, true);
     });
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
   const loadFundaciones = async (page, reset, cb) => {
     const jsonValue = await AsyncStorage.getItem('session');
@@ -114,27 +105,17 @@ const FundacionScreen = ({ navigation }) => {
             Fundaciones registradas
           </Text>
 
-          {isLoading ? <ActivityIndicator size="large" color={Colors.greenPet} style={{ marginTop: 20 }} /> : loadFundacion(navigation)}
+          {isLoading ? (
+            <ActivityIndicator size="large" color={Colors.greenPet} style={{ marginTop: 20 }} />
+          ) : error ? (
+            <Text style={{ color: Colors.red, textAlign: 'center', marginTop: 20 }}>{error}</Text>
+          ) : (
+            loadFundacion(navigation)
+          )}
         </InnerContainer>
       </StyledScrollContainer>
     </StyledSafeArea>
   );
 };
-
-const styles = StyleSheet.create({
-  filtroButton: {
-    backgroundColor: Colors.pinkPet,
-    width: 140,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  filtroTextButton: {
-    fontWeight: 'bold',
-    color: Colors.primary,
-    fontSize: 16,
-  },
-});
 
 export default FundacionScreen;

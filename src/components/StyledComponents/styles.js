@@ -1,7 +1,5 @@
 import styled from 'styled-components/native';
-import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import Constants from 'expo-constants';
-import { Dimensions } from 'react-native';
 
 // Obtenemos la altura de la barra de status de los dispositivos
 const StatusBarHeight = Constants.statusBarHeight;
@@ -27,8 +25,7 @@ export const Colors = {
   beige: '#F8F9FA', // White/Light gray from web background
 };
 
-const { primary, secondary, tertiary, darklight, brand, green, red, pie, black, greenPet, gray, pinkPet, blue } =
-  Colors;
+const { primary, tertiary, darklight, red, greenPet, gray } = Colors;
 
 export const StyledSafeArea = styled.SafeAreaView`
   flex: 1;

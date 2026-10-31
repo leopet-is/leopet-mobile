@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator } from 'react-native';
 
@@ -9,25 +9,20 @@ import { Formik } from 'formik';
 import CustomHeader from '../components/Headers/CustomHeader';
 // Icons
 import { Octicons, Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
-  Subtitle,
   StyledFormArea,
   StyledTextInput,
   StyledInputLabel,
   LeftIcon,
   RightIcon,
-  StyledButton,
   StyledButtonMedio,
   ButtonText,
   MsgBox,
   ExtraViewMargin,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 
@@ -45,8 +40,16 @@ const Perfil = ({ navigation }) => {
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  /* const [usuario, setUsuario] = useState(getUsuario);
-  console.log(usuario); */
+
+  const registerUser = (values) => {
+    console.log('registerUser', values);
+    setLoading(true);
+    // TODO: Conectar con endpoint de actualización de perfil
+    setTimeout(() => {
+      setLoading(false);
+      setError(false);
+    }, 500);
+  };
 
   return (
     <StyledSafeArea>

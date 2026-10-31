@@ -1,11 +1,9 @@
-import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Octicons, Ionicons } from '@expo/vector-icons';
-import { View, TouchableOpacity, ActivityIndicator, StyleSheet, Image, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'react-native';
 
 
-import Welcome from '../screens/Home';
 import Perfil from '../screens/Perfil';
 import ManadaStack from './ManadaStack';
 import HomeStack from './HomeStack';
@@ -22,7 +20,7 @@ export default function HomeTab() {
     <Tab.Navigator
       initialRouteName="Welcome"
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused }) => {
           let iconName;
 
           if (route.name === 'Animales') {

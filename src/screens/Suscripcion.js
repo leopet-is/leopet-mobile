@@ -1,39 +1,27 @@
-import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { View, Text } from 'react-native';
 //Services
-import { apadrinar } from '../services/Manada';
 
 // Header
 import CustomHeader from '../components/Headers/CustomHeader';
 
 // Icons
-import Animales from '../components/Cards/CardAnimal';
 
 import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
-  Subtitle,
-  StyledButton,
   StyledButtonMedio,
   StyledButtonMedioCancelar,
   ButtonText,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { GLOBALCONFIG } from '../Config';
 
-const Suscripcion = ({ route, navigation }) => {
-  const uri = GLOBALCONFIG.EndpointBackHost;
+const Suscripcion = ({ navigation }) => {
+  // const uri = GLOBALCONFIG.EndpointBackHost;
 
-  const [error, setError] = useState(false);
-  const [isLoading, setLoading] = useState();
+  // const [error, setError] = useState(false);
+  // const [isLoading, setLoading] = useState();
 
   return (
     <StyledSafeArea>
@@ -66,16 +54,6 @@ const Suscripcion = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  btnPayPal: {
-    padding: 15,
-    backgroundColor: Colors.greenPet,
-    justifyContent: 'center',
-    borderRadius: 5,
-    marginVertical: 5,
-    height: 60,
-    width: 200,
-  },
-});
+
 
 export default Suscripcion;

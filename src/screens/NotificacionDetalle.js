@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, TouchableOpacity, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { updateNotificacion as updateNotificacionService } from '../services/Notificaciones';
 import CustomHeader from '../components/Headers/CustomHeader';
 

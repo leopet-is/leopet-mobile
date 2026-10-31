@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, TouchableOpacity } from 'react-native';
-import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View } from 'react-native';
 
 //Services
 //Formik
-import CardManada from '../components/Cards/CardManada';
-import { getManadas } from '../services/Manada';
+
 
 // Header
 import CustomHeader from '../components/Headers/CustomHeader';
 // Icons
-import { Octicons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import {
   StyledSafeArea,
@@ -20,19 +16,8 @@ import {
   InnerContainer,
   PageTitle,
   Subtitle,
-  StyledFormArea,
-  StyledTextInput,
-  StyledInputLabel,
-  LeftIcon,
-  RightIcon,
-  StyledButton,
   StyledButtonMedio,
   ButtonText,
-  MsgBox,
-  ExtraViewMargin,
-  ExtraText,
-  TextLink,
-  TextLinkContent,
   TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';

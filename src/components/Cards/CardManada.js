@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card } from '@rneui/themed';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { Colors } from '../StyledComponents/styles';

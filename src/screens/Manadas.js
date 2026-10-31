@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, TouchableOpacity  } from 'react-native';
 import CustomHeader from '../components/Headers/CustomHeader';
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Divider } from '@rneui/themed';
-import Constants from 'expo-constants';
+
+import { Divider, Card  } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card } from '@rneui/themed';
+
 
 // Icons
-import { Octicons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 // Servicios
 import { getManadas, deleteAllAnimalsManadaApp } from '../services/Manada';
@@ -20,9 +19,7 @@ import CardManada from '../components/Cards/CardManada';
 import {
   StyledSafeArea,
   InnerContainer,
-  PageTitle,
   StyledScrollContainer,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 import { GLOBALCONFIG } from '../Config';
@@ -38,7 +35,8 @@ const HomeScreen = ({ navigation }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       loadManadas(0, true);
     });
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
   const loadManadas = async (page, reset, cb) => {
     const jsonValue = await AsyncStorage.getItem('session');
@@ -85,7 +83,7 @@ const HomeScreen = ({ navigation }) => {
         token: data.token,
       },
     )
-      .then((data) => {
+      .then(() => {
         alert('Manada Eliminada');
         loadManadas(0, true);
       })
@@ -169,7 +167,13 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
 
           <Divider />
-          {isLoading ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadManada()}
+          {isLoading ? (
+            <ActivityIndicator size="large" color={Colors.darklight} />
+          ) : error ? (
+            <Text style={{ color: Colors.red, textAlign: 'center', margin: 20 }}>{error}</Text>
+          ) : (
+            loadManada()
+          )}
           <View style={{ marginBottom: 30 }}></View>
         </InnerContainer>
       </StyledScrollContainer>

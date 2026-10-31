@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Modal, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Text, View } from 'react-native';
 import { StyledButtonMedio } from '../components/StyledComponents/styles';
 
 export const ModalApadrinarScreen = () => {

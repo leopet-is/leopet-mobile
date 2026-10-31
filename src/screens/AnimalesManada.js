@@ -1,47 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
 import CustomHeader from '../components/Headers/CustomHeader';
 import { StatusBar } from 'expo-status-bar';
 import Animales from '../components/Cards/CardAnimal';
-import { ActivityIndicator } from 'react-native';
+
 import { Divider } from '@rneui/themed';
-import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Servicios
 import { getAnimals } from '../services/Animals';
 import { deleteAnimalsManadaApp } from '../services/Manada';
 
-// Cards
-import CardManada from '../components/Cards/CardManada';
 
 import {
   StyledSafeArea,
-  StyledContainerHome,
   InnerContainer,
-  PageLogo,
   PageTitle,
   Subtitle,
   StyledScrollContainer,
-  StyledTextInput,
-  StyledInputLabel,
-  LeftIcon,
-  RightIcon,
-  StyledButton,
   StyledButtonMedio,
   ButtonText,
-  MsgBox,
   ExtraView,
-  ExtraText,
-  TextLink,
-  HeaderView,
   TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 import { GLOBALCONFIG } from '../Config';
 
 const AnimalesManada = ({ route, navigation }) => {
-  const { manadaId, nombre, galeriamanada, monto, apadrinados, prueba } = route.params;
+  const { manadaId, nombre,  monto, apadrinados } = route.params;
 
   const uri = GLOBALCONFIG.EndpointBackHost;
 
@@ -53,7 +39,8 @@ const AnimalesManada = ({ route, navigation }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       loadAnimals(0, true);
     });
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
   const loadAnimals = async (page, reset, cb) => {
     const jsonValue = await AsyncStorage.getItem('session');
@@ -119,7 +106,7 @@ const AnimalesManada = ({ route, navigation }) => {
         token: data.token,
       },
     )
-      .then((data) => {
+      .then(() => {
         loadAnimals(0, true);
       })
       .catch((err) => {
@@ -182,7 +169,13 @@ const AnimalesManada = ({ route, navigation }) => {
           </StyledButtonMedio>
           <Divider />
           {/*   {isLoading ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadAnimal()} */}
-          {isLoading ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadAnimal(navigation)}
+          {isLoading ? (
+            <ActivityIndicator size="large" color={Colors.darklight} />
+          ) : error ? (
+            <Text style={{ color: Colors.red, textAlign: 'center', margin: 20 }}>{error}</Text>
+          ) : (
+            loadAnimal(navigation)
+          )}
           <View style={{ marginBottom: 30 }}></View>
         </InnerContainer>
       </StyledScrollContainer>

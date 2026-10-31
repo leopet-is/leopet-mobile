@@ -13,7 +13,7 @@ export async function getSolicitudesFundacion(props, { apiUrl, token }) {
       headers: { authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
   if (response.status >= 400 && response.status < 600) {
     const { error } = await response.json();
@@ -29,7 +29,7 @@ export async function getSolicitudFundacionById(solicitudId, { apiUrl, token }) 
   try {
     response = await fetch(url, { method: 'GET', headers: { authorization: 'Bearer ' + token, 'Content-Type': 'application/json' } });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
   if (response.status >= 400 && response.status < 600) {
     const { error } = await response.json();
@@ -45,7 +45,7 @@ export async function approveSolicitudFundacion(solicitudId, { apiUrl, token }) 
   try {
     response = await fetch(url, { method: 'PUT', headers: { authorization: 'Bearer ' + token, 'Content-Type': 'application/json' } });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
   if (response.status >= 400 && response.status < 600) {
     const { error } = await response.json();
@@ -65,7 +65,7 @@ export async function rejectSolicitudFundacion(solicitudId, notas_admin, { apiUr
       body: JSON.stringify({ notas_admin }),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
   if (response.status >= 400 && response.status < 600) {
     const { error } = await response.json();
@@ -81,7 +81,7 @@ export async function getSolicitudesReadyForCreation({ apiUrl, token }) {
   try {
     response = await fetch(url, { method: 'GET', headers: { authorization: 'Bearer ' + token, 'Content-Type': 'application/json' } });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
   if (response.status >= 400 && response.status < 600) {
     const { error } = await response.json();

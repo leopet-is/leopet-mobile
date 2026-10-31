@@ -1,4 +1,3 @@
-import React from 'react';
 // React Navigation
 
 import { createStackNavigator } from '@react-navigation/stack';
@@ -6,9 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Tabs
 
 //Screens
-import CrearManada from '../screens/CrearManada';
 import FundacionScreen from '../screens/FundacionScreen';
-import AnimalesManada from '../screens/AnimalesManada';
 import FundacionDetalle from '../screens/FundacionDetalle';
 import AnimalDetalle from '../screens/AnimalDetalle';
 

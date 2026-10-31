@@ -17,7 +17,7 @@ export async function createManada(manada, { apiUrl, token }) {
       body: JSON.stringify(manada),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -45,7 +45,7 @@ export async function getManadas(props, { apiUrl, token }) {
       },
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -75,7 +75,7 @@ export async function apadrinar(props, { apiUrl, token }) {
       }),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -99,7 +99,7 @@ export async function actualizarManada(manada, { apiUrl, token }) {
       body: JSON.stringify(manada),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -133,7 +133,7 @@ export async function deleteAnimalsManadaApp(props, { apiUrl, token }) {
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -164,7 +164,7 @@ export async function deleteAllAnimalsManadaApp(props, { apiUrl, token }) {
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {

@@ -87,7 +87,7 @@ export async function register({ user, fundation }, { apiUrl, token }) {
     try {
       errorData = await response.json();
     } catch (e) {
-      throw new Error(`Error del servidor: ${response.status}`);
+      throw new Error(`Error del servidor: ${response.status}`, { cause: e });
     }
     
     const error = new Error('Error de validación');

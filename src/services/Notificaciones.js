@@ -10,7 +10,7 @@ export async function getNotificaciones({ apiUrl, token }) {
       },
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
 
   if (response.status >= 400 && response.status < 600) {
@@ -37,7 +37,7 @@ export async function updateNotificacion(notificacion, { apiUrl, token }) {
       body: JSON.stringify(notificacion),
     });
   } catch (error) {
-    throw new Error('Please check your internet connection and try again');
+    throw new Error('Please check your internet connection and try again', { cause: error });
   }
   if (response.status === 401) {
     // Session expired

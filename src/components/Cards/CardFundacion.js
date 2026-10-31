@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import { Card } from '@rneui/themed';
 import { View, ActivityIndicator, StyleSheet, Text, Image } from 'react-native';
-import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, Feather} from '@expo/vector-icons';
 import { Colors } from '../StyledComponents/styles';
 
 const CardFundacion = (props) => {

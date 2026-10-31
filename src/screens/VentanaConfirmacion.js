@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Dialog from 'react-native-dialog';
-import { Octicons } from '@expo/vector-icons';
 
 import {
-  StyledSafeArea,
-  StyledScrollContainer,
-  InnerContainer,
-  PageTitle,
-  Subtitle,
-  StyledButton,
-  StyledButtonMedio,
-  StyledButtonMedioCancelar,
-  ButtonText,
-  TextInfo,
   Colors,
 } from '../components/StyledComponents/styles';
 
-const VentanaConfirmacion = ({ visible, titulo, icon, descripcion, cancelar, aceptar }) => {
+const VentanaConfirmacion = ({ visible, titulo, descripcion, cancelar, aceptar }) => {
   const opcionCancelar = () => {
     cancelar();
   };

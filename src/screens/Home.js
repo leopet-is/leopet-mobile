@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomHeader from '../components/Headers/CustomHeader';
-import Constants from 'expo-constants';
 import Animales from '../components/Cards/CardAnimal';
-import { ActivityIndicator, TouchableOpacity, Text, View, StyleSheet, TextInput, ScrollView } from 'react-native';
-import { Divider, CheckBox } from '@rneui/themed';
+import { ActivityIndicator, TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
+import { CheckBox } from '@rneui/themed';
 
 // Servicios
 // Iconos
@@ -15,18 +14,11 @@ import { getAnimalsApp } from '../services/Animals';
 import {
   StyledSafeArea,
   InnerContainer,
-  PageTitle,
   StyledScrollContainer,
-  StyledButton,
-  StyledButtonMedio,
-  ButtonText,
-  TextInfo,
   Colors,
-  ExtraView,
   ViewFiltro,
   ViewFiltroButton,
 } from '../components/StyledComponents/styles';
-import styled from 'styled-components/native';
 import { GLOBALCONFIG } from '../Config';
 
 const Home = ({ navigation }) => {

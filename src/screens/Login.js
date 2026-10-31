@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator, Image, StyleSheet, LogBox, Text, TouchableOpacity } from 'react-native';
+import { View, ActivityIndicator, LogBox, Dimensions  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
+
 import Constants from 'expo-constants';
 
 

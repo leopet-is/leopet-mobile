@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator } from 'react-native';
-import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Formik para el Formulario
@@ -20,13 +19,10 @@ import {
   StyledSafeArea,
   StyledScrollContainer,
   InnerContainer,
-  PageTitle,
-  Subtitle,
   StyledFormArea,
   StyledTextInput,
   StyledInputLabel,
   LeftIcon,
-  StyledButton,
   StyledButtonMedio,
   ButtonText,
   MsgBox,
@@ -43,12 +39,6 @@ const CrearManada = ({ route, navigation }) => {
     nombre,
     monto,
     animalId,
-    nombreAnimal,
-    descripcion,
-    imagen,
-    fundacion,
-    raza,
-    especie,
   } = route.params;
   const uri = GLOBALCONFIG.EndpointBackHost;
   const [error, setError] = useState(false);
@@ -81,7 +71,7 @@ const CrearManada = ({ route, navigation }) => {
         apiUrl: uri,
         token: data.token,
       })
-        .then(() => {
+        .then((created) => {
           // if an animalId was provided in params, apadrinar it into the new manada
           if (animalId) {
             // created may be the created manada object or id depending on API
