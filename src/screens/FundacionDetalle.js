@@ -64,7 +64,7 @@ const FundacionDetalle = ({ route, navigation }) => {
             ) : (
               <Image
                 style={styles.logo}
-                source={fundacionId == 3 ? require('../assets/img/logo.png') : { uri: logo }}
+                source={fundacionId == 3 ? require('../assets/img/leopet.png') : { uri: logo }}
                 resizeMode="contain"
               />
             )}
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   headerHero: {
     alignItems: 'center',
     paddingVertical: 30,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: Colors.beige,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     elevation: 2,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: Colors.border,
   },
   logo: {
     width: '80%',
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   foundationName: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: Colors.greenPet,
+    color: Colors.tertiary,
     textAlign: 'center',
     paddingHorizontal: 20,
   },

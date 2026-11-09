@@ -47,7 +47,7 @@ const CustomHeader = ({ navigation, isHome, isAnimalDetalle }) => {
           </TouchableOpacity>
         ) : (
           <Image
-            source={require('../../assets/img/logo.png')}
+            source={require('../../assets/img/leopet.png')}
             style={{ width: 100, height: 35, resizeMode: 'contain' }}
           />
         )}

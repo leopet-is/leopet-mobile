@@ -72,7 +72,7 @@ const CardManada = ({
           </View>
         </View>
 
-        <View style={[styles.statBox, { borderLeftWidth: 1, borderLeftColor: '#E5E7EB' }]}>
+        <View style={[styles.statBox, { borderLeftWidth: 1, borderLeftColor: Colors.border }]}>
           <Text style={styles.statLabel}>Suscripción mensual</Text>
           <Text style={styles.statValueGreen}>$ {totalMensual}</Text>
         </View>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: Colors.beige,
     borderRadius: 15,
     padding: 15,
     marginBottom: 15,

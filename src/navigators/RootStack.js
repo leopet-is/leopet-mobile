@@ -1,13 +1,13 @@
 // React Navigation
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Navigators & Screens
 import OptionsDrawer from './OptionsDrawer';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 
 const RootStack = () => {

@@ -150,10 +150,10 @@ const StatusItem = ({ label, status }) => (
         {
           backgroundColor:
             status === true || status === 1
-              ? '#D1FAE5'
+              ? Colors.successSoft
               : status === false || status === 0
-                ? '#FEE2E2'
-                : '#E5E7EB',
+                ? Colors.errorSoft
+                : Colors.secondary,
         },
       ]}
     >
@@ -161,9 +161,9 @@ const StatusItem = ({ label, status }) => (
         style={{
           color:
             status === true || status === 1
-              ? '#065F46'
+              ? '#087443'
               : status === false || status === 0
-                ? '#991B1B'
+                ? Colors.red
                 : Colors.gray,
           fontSize: 12,
           fontWeight: 'bold',
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 300,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: Colors.secondary,
   },
   mainImage: {
     width: '100%',
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: Colors.border,
     paddingBottom: 5,
   },
   sectionTitle: {
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   infoItem: {
     width: '48%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: Colors.beige,
     padding: 12,
     borderRadius: 10,
     marginBottom: 10,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   },
   historyBox: {
     width: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: Colors.secondary,
     padding: 15,
     borderRadius: 10,
     marginTop: 5,

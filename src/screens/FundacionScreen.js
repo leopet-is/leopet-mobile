@@ -101,7 +101,7 @@ const FundacionScreen = ({ navigation }) => {
         <InnerContainer>
           <StatusBar style="dark" />
 
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: Colors.greenPet, marginVertical: 20, textAlign: 'center' }}>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: Colors.tertiary, marginVertical: 20, textAlign: 'center' }}>
             Fundaciones registradas
           </Text>
 

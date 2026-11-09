@@ -134,7 +134,7 @@ const NotificacionDetalle = ({ route, navigation }) => {
           onPress={() => navigation.navigate('Detalle de Animal', { animalId: notificacion.animal.id, ...notificacion.animal })}
         >
           <Text style={styles.buttonText}>Ver perfil completo de {notificacion.animal?.nombre}</Text>
-          <Ionicons name="arrow-forward" size={20} color="white" />
+          <Ionicons name="arrow-forward" size={20} color={Colors.tertiary} />
         </TouchableOpacity>
       </ScrollView>
     </StyledSafeArea>
@@ -144,7 +144,7 @@ const NotificacionDetalle = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 40,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: Colors.beige,
   },
   heroSection: {
     height: 250,
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   tagText: {
-    color: 'white',
+    color: Colors.tertiary,
     fontSize: 12,
     fontWeight: 'bold',
     marginLeft: 6,
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     color: Colors.tertiary,
   },
   statusBox: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: Colors.secondary,
     padding: 15,
     borderRadius: 15,
     marginBottom: 20,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: Colors.secondary,
   },
   ratingTitle: {
     fontSize: 16,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   buttonText: {
-    color: 'white',
+    color: Colors.tertiary,
     fontSize: 16,
     fontWeight: 'bold',
     marginRight: 10,

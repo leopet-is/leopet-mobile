@@ -308,7 +308,7 @@ const Home = ({ navigation }) => {
             style={styles.filterSubmitButton}
             onPress={() => setShowHealthFilters(false)}
           >
-            <Feather name="filter" size={16} color="white" />
+            <Feather name="filter" size={16} color={Colors.tertiary} />
             <Text style={styles.filterSubmitText}>Filtrar</Text>
           </TouchableOpacity>
         </View>
@@ -356,30 +356,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 3,
-    borderBottomColor: Colors.pinkPet,
+    borderBottomColor: Colors.greenPet,
   },
 
   filtroTextButton: {
     fontWeight: 'bold',
-    color: '#6B7280',
+    color: Colors.gray,
     fontSize: 16,
   },
 
   filtroTextButtonPresionado: {
     fontWeight: 'bold',
-    color: Colors.pinkPet,
+    color: Colors.tertiary,
     fontSize: 16,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: Colors.primary,
     borderRadius: 25,
     marginHorizontal: 15,
     marginBottom: 10,
     height: 45,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: Colors.border,
   },
   searchInput: {
     flex: 1,
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     color: Colors.tertiary,
   },
   healthFiltersContainer: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.primary,
     marginHorizontal: 15,
     marginBottom: 15,
     padding: 15,
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   filterSubmitText: {
-    color: 'white',
+    color: Colors.tertiary,
     fontWeight: 'bold',
     marginLeft: 5,
     fontSize: 14,

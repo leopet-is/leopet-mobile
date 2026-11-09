@@ -66,10 +66,10 @@ export default function FundacionesAdmin({ navigation }) {
           <Text style={[styles.actionText, { color: '#fff' }]}>Eliminar</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.actionBtn, { backgroundColor: '#3498db' }]}
+          style={[styles.actionBtn, { backgroundColor: Colors.greenPet }]}
           onPress={() => navigation.navigate('Detalle de Fundacion', { fundacionId: item.id, edit: true })}
         >
-          <Text style={[styles.actionText, { color: '#fff' }]}>Editar</Text>
+          <Text style={[styles.actionText, { color: Colors.tertiary }]}>Editar</Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -128,8 +128,8 @@ export default function FundacionesAdmin({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-  title: { fontSize: 18, fontWeight: 'bold', color: Colors.greenPet, marginBottom: 8 },
+  title: { fontSize: 18, fontWeight: 'bold', color: Colors.tertiary, marginBottom: 8 },
   actionsRow: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginTop: 8 },
-  actionBtn: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 6, backgroundColor: '#f0f0f0' },
-  actionText: { color: Colors.greenPet, fontWeight: 'bold' },
+  actionBtn: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 6, backgroundColor: Colors.cyanSoft },
+  actionText: { color: Colors.tertiary, fontWeight: 'bold' },
 });

@@ -90,7 +90,7 @@ const Login = ({ navigation }) => {
       <FullScreenCenterContainer>
             <InnerContainer>
             <StatusBar style="dark" />
-            <PageLogo resizeMode="cover" source={require('../assets/img/logo.png')} />
+            <PageLogo resizeMode="cover" source={require('../assets/img/leopet.png')} />
             <Formik
               initialValues={{ correo: '', contrasenia: '' }}
               validate={({ correo, contrasenia }) => {
@@ -214,7 +214,7 @@ export const FullScreenCenterContainer = styled.View`
   min-height: ${windowHeight}px;
   padding: 15px;
   padding-top: ${StatusBarHeight + 17}px;   
-  background-color: #F9FAFB;     
+  background-color: ${Colors.beige};
 `;
 
 export default Login;

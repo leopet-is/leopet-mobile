@@ -29,7 +29,7 @@ export default function AdminHome({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { padding: 20, alignItems: 'stretch' },
-  title: { fontSize: 22, fontWeight: 'bold', color: Colors.greenPet, marginBottom: 16 },
+  title: { fontSize: 22, fontWeight: 'bold', color: Colors.tertiary, marginBottom: 16 },
   card: { backgroundColor: '#fff', padding: 16, borderRadius: 8, marginBottom: 12, elevation: 2 },
   cardText: { fontSize: 16, color: Colors.tertiary },
 });

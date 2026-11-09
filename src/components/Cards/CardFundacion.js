@@ -19,7 +19,7 @@ const CardFundacion = (props) => {
           ) : (
             <Image
               style={styles.logo}
-              source={id == 3 ? require('../../assets/img/logo.png') : { uri: logo }}
+              source={id == 3 ? require('../../assets/img/leopet.png') : { uri: logo }}
               resizeMode="contain"
             />
           )}
@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: Colors.beige,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: Colors.border,
     overflow: 'hidden',
   },
   logo: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   nombre: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: Colors.greenPet,
+    color: Colors.tertiary,
     textAlign: 'center',
   },
   details: {

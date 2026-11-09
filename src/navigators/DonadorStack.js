@@ -1,4 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import DonadorHome from '../screens/Donador/DonadorHome';
 import DonadorAnimals from '../screens/Donador/DonadorAnimals';
@@ -7,7 +7,7 @@ import CrearManada from '../screens/CrearManada';
 import FundacionDetalle from '../screens/FundacionDetalle';
 import AnimalDetalle from '../screens/AnimalDetalle';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function DonadorStack() {
   return (

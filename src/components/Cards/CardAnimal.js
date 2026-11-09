@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     overflow: 'hidden',
     borderWidth: 0,
+    backgroundColor: Colors.primary,
     width: '92%',
     alignSelf: 'center',
   },
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     height: 180,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: Colors.secondary,
   },
   contentContainer: {
     padding: 15,
@@ -204,27 +205,27 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   badgeRed: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: Colors.errorSoft,
   },
   badgeGreen: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: Colors.successSoft,
   },
   badgeTextRed: {
-    color: '#991B1B',
+    color: Colors.red,
     fontSize: 11,
     fontWeight: 'bold',
   },
   badgeTextGreen: {
-    color: '#065F46',
+    color: '#087443',
     fontSize: 11,
     fontWeight: 'bold',
   },
   badgeOrange: {
-    backgroundColor: '#FFEDD5',
+    backgroundColor: Colors.warningSoft,
     borderColor: '#F97316',
   },
   badgeTextOrange: {
-    color: '#C2410C',
+    color: '#9A3412',
     fontSize: 10,
     fontWeight: 'bold',
   },

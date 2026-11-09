@@ -1,5 +1,5 @@
 // React Navigation
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Tabs
 //Screens
@@ -17,7 +17,7 @@ import NotificacionDetalle from '../screens/NotificacionDetalle';
 import { Colors } from '../components/StyledComponents/styles';
 import AnimalDetalle from '../screens/AnimalDetalle';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
   return (

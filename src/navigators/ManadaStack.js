@@ -1,6 +1,6 @@
 // React Navigation
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Tabs
 
@@ -12,7 +12,7 @@ import Notificaciones from '../screens/Notificaciones';
 //Colors
 import { Colors } from '../components/StyledComponents/styles';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const ManadaStack = () => {
   return (

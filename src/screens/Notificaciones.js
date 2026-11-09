@@ -185,7 +185,7 @@ const Notificaciones = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Colors.greenPet,
+    backgroundColor: Colors.tertiary,
     paddingTop: Constants.statusBarHeight + 10,
     paddingBottom: 25,
     paddingHorizontal: 20,
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 15,
-    backgroundColor: '#F3F4F6', // Web background gray
+    backgroundColor: Colors.beige,
     minHeight: '100%',
   },
   notificationBubble: {
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   unreadBubble: {
-    borderColor: 'rgba(78, 164, 177, 0.2)',
+    borderColor: Colors.border,
     borderWidth: 1,
   },
   unreadDot: {
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   iconNormal: {
-    backgroundColor: Colors.greenPet,
+    backgroundColor: Colors.tertiary,
   },
   iconAlert: {
     backgroundColor: Colors.red,
@@ -291,20 +291,20 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   tagBlue: {
-    backgroundColor: '#E0F2FE',
+    backgroundColor: Colors.cyanSoft,
   },
   tagRed: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: Colors.errorSoft,
   },
   tagText: {
     fontSize: 10,
     fontWeight: 'bold',
   },
   tagTextBlue: {
-    color: '#0369A1',
+    color: Colors.tertiary,
   },
   tagTextRed: {
-    color: '#B91C1C',
+    color: Colors.red,
   },
   dateContainer: {
     flexDirection: 'row',
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginRight: 10,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: Colors.border,
   },
   avatar: {
     width: '100%',

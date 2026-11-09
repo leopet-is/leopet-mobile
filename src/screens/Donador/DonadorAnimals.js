@@ -71,7 +71,7 @@ export default function DonadorAnimals({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-  title: { fontSize: 18, fontWeight: 'bold', color: Colors.greenPet, marginBottom: 8 },
+  title: { fontSize: 18, fontWeight: 'bold', color: Colors.tertiary, marginBottom: 8 },
   itemContainer: { marginBottom: 12 },
   actions: { flexDirection: 'row', justifyContent: 'flex-end', marginRight: 12, marginTop: 6 },
   apadrinarBtn: { backgroundColor: Colors.pinkPet, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 6 },

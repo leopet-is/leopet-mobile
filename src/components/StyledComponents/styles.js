@@ -8,24 +8,29 @@ const StatusBarHeight = Constants.statusBarHeight;
 
 // colores
 export const Colors = {
-  primary: '#ffffff',
-  secondary: '#E5E7EB',
-  tertiary: '#1F2937',
-  darklight: '#9CA3AF',
-  brand: '#4EA4B1', // Teal from web primary
+  primary: '#FFFFFF',
+  secondary: '#E4F0F2',
+  tertiary: '#064B55',
+  darklight: '#9AAEB2',
+  brand: '#064B55',
   green: '#10B981',
-  red: '#EF4444',
-  pie: '#F9CED5', // Pink from web secondary
+  red: '#E5484D',
+  pie: '#F9CED5',
   black: '#000000',
-  greenPet: '#4EA4B1', // Align with brand
-  gray: '#808080',
-  pinkPet: '#F9CED5', // Align with pie
-  pinkLow: '#FCBAB8',
+  greenPet: '#08BCD1',
+  gray: '#667D82',
+  pinkPet: '#EF5572',
+  pinkLow: '#FADDE3',
   blue: '#3B5998',
-  beige: '#F8F9FA', // White/Light gray from web background
+  beige: '#F7F9FA',
+  border: '#C9DEE2',
+  cyanSoft: '#E1F7FA',
+  successSoft: '#D1FAE5',
+  errorSoft: '#FEE2E2',
+  warningSoft: '#FFEDD5',
 };
 
-const { primary, tertiary, darklight, red, greenPet, gray } = Colors;
+const { primary, secondary, tertiary, red, greenPet, gray, beige } = Colors;
 
 export const StyledSafeArea = styled.SafeAreaView`
   flex: 1;
@@ -40,20 +45,20 @@ export const StyledSafeAreaLogin = styled.SafeAreaView`
 
 export const StyledScrollContainer = styled.ScrollView`
   flex: 1;
-  background-color: #F9FAFB;
+  background-color: ${beige};
 `;
 
 export const StyledContainerHome = styled.View`
   flex: 1;
   padding: 20px;
-  background-color: ${primary};
+  background-color: ${beige};
   padding-top: ${StatusBarHeight}px;
 `;
 
 export const StyledContainer = styled.View`
   flex: 1;
   padding: 15px;
-  background-color: #F9FAFB;
+  background-color: ${beige};
   padding-top: ${StatusBarHeight + 17}px;
 `;
 
@@ -72,7 +77,7 @@ export const PageTitle = styled.Text`
   font-size: 30px;
   text-align: center;
   font-weight: bold;
-  color: ${greenPet};
+  color: ${tertiary};
   letter-spacing: 1.5px;
 `;
 
@@ -91,7 +96,7 @@ export const StyledFormArea = styled.View`
 export const StyledTextInput = styled.TextInput`
   background-color: ${primary};
   border-width: 1.5px;
-  border-color: ${darklight};
+  border-color: ${secondary};
   padding: 15px;
   padding-left: 55px;
   padding-right: 55px;
@@ -147,7 +152,7 @@ export const StyledButtonMedio = styled.TouchableOpacity`
 
 export const StyledButtonMedioCancelar = styled.TouchableOpacity`
   padding: 5px;
-  background-color: ${greenPet};
+  background-color: ${Colors.pinkPet};
   opacity: 0.8;
   justify-content: center;
   borderRadius: 5px;
@@ -157,7 +162,7 @@ export const StyledButtonMedioCancelar = styled.TouchableOpacity`
 `;
 
 export const ButtonText = styled.Text`
-  color: ${primary};
+  color: ${tertiary};
   font-size: 16px;
   text-align: center;
   font-weight: bold;
@@ -235,7 +240,9 @@ export const HeaderView = styled.View`
   opacity: 1;
   width: 100%;
   margin-top: ${StatusBarHeight}px;
-  background-color: white;
+  background-color: ${primary};
+  border-bottom-width: 1px;
+  border-bottom-color: ${secondary};
 `;
 
 export const ViewNombreLarge = styled.View`

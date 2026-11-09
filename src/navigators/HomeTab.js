@@ -30,14 +30,21 @@ export default function HomeTab() {
           } else if (route.name === 'Fundación') {
             iconName = focused ? require('../assets/icons/hand-heart.png') : require('../assets/icons/hand-heart-outline.png');
           } else if (route.name === 'Perfil') {
-            return <Ionicons name={focused ? 'person' : 'person-outline'} size={25} color={focused ? greenPet : 'gray'} />;
+            return <Ionicons name={focused ? 'person' : 'person-outline'} size={25} color={focused ? greenPet : Colors.gray} />;
           }
 
           return <Image source={iconName} style={{ width: 25, height: 25 }} />;
 
         },
         tabBarActiveTintColor: greenPet,
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: Colors.gray,
+        tabBarStyle: {
+          backgroundColor: Colors.primary,
+          borderTopColor: Colors.secondary,
+        },
+        tabBarLabelStyle: {
+          fontWeight: '600',
+        },
         headerShown: false,
       })}
     >

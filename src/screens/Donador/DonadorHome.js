@@ -20,7 +20,7 @@ export default function DonadorHome({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
-  title: { fontSize: 22, fontWeight: 'bold', color: Colors.greenPet, marginBottom: 20 },
+  title: { fontSize: 22, fontWeight: 'bold', color: Colors.tertiary, marginBottom: 20 },
   card: { backgroundColor: '#fff', padding: 16, borderRadius: 8, marginBottom: 12, elevation: 2 },
   cardText: { fontSize: 16, color: Colors.tertiary },
 });

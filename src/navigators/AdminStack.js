@@ -1,4 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import AdminHome from '../screens/Admin/AdminHome';
 import FundacionesAdmin from '../screens/Admin/FundacionesAdmin';
@@ -9,7 +9,7 @@ import ReportesAdmin from '../screens/Admin/ReportesAdmin';
 import NotificacionesAdmin from '../screens/Admin/NotificacionesAdmin';
 import AdminDenuncias from '../screens/AdminDenuncias';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function AdminStack() {
   return (
