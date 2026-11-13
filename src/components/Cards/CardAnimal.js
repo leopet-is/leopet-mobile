@@ -13,14 +13,11 @@ const Animales = (props) => {
     id,
     nombre,
     onPress,
+    onApadrinar,
     fundacion,
     raza,
     especie,
     fundacion_id,
-    esterilizacion,
-    vacunacion,
-    desparasitacion,
-    enfermedades,
     isMenuManada,
     eliminarAnimalManada,
   } = props;
@@ -118,51 +115,34 @@ const Animales = (props) => {
               )}
             </View>
 
-            <View style={styles.detailsContainer}>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Especie: </Text>
-                <Text style={styles.detailValue}>{especie}</Text>
+            <View style={styles.detailActionRow}>
+              <View style={styles.detailsContainer}>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Especie: </Text>
+                  <Text style={styles.detailValue}>{especie}</Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Raza: </Text>
+                  <Text style={styles.detailValue}>{raza}</Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Fundación: </Text>
+                  <Text style={styles.detailValue}>{fundacionNombre}</Text>
+                </View>
               </View>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Raza: </Text>
-                <Text style={styles.detailValue}>{raza}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Fundación: </Text>
-                <Text style={styles.detailValue}>{fundacionNombre}</Text>
-              </View>
-            </View>
-
-            <View style={styles.badgeContainer}>
-              {vacunacion === false && (
-                <View style={[styles.badge, styles.badgeRed]}>
-                  <Text style={styles.badgeTextRed}>X No Vacunado</Text>
-                </View>
-              )}
-              {esterilizacion === false && (
-                <View style={[styles.badge, styles.badgeRed]}>
-                  <Text style={styles.badgeTextRed}>X No Esterilizado</Text>
-                </View>
-              )}
-              {vacunacion === true && (
-                <View style={[styles.badge, styles.badgeGreen]}>
-                  <Text style={styles.badgeTextGreen}>✓ Vacunado</Text>
-                </View>
-              )}
-              {esterilizacion === true && (
-                <View style={[styles.badge, styles.badgeGreen]}>
-                  <Text style={styles.badgeTextGreen}>✓ Esterilizado</Text>
-                </View>
-              )}
-              {desparasitacion === false && (
-                <View style={[styles.badge, styles.badgeRed]}>
-                  <Text style={styles.badgeTextRed}>X No Desparasitado</Text>
-                </View>
-              )}
-              {enfermedades && !['ninguna', 'ninguno', 'no'].includes(enfermedades.trim().toLowerCase()) && (
-                <View style={[styles.badge, styles.badgeOrange]}>
-                  <Text style={styles.badgeTextOrange}>⚠ {enfermedades}</Text>
-                </View>
+              {onApadrinar && (
+                <TouchableOpacity
+                  style={styles.apadrinarButton}
+                  onPress={(event) => {
+                    event.stopPropagation();
+                    onApadrinar(props);
+                  }}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Apadrinar a ${nombre || 'este animal'}`}
+                >
+                  <Ionicons name="heart" size={18} color={Colors.greenPet} />
+                  <Text style={styles.apadrinarButtonText}>Apadrinar</Text>
+                </TouchableOpacity>
               )}
             </View>
           </View>
@@ -272,7 +252,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   detailsContainer: {
-    marginBottom: 12,
+    flex: 1,
+    marginRight: 10,
+  },
+  detailActionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   detailRow: {
     flexDirection: 'row',
@@ -287,40 +272,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.gray,
   },
-  badgeContainer: {
+  apadrinarButton: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    width: 110,
+    minHeight: 52,
+    paddingHorizontal: 6,
+    paddingVertical: 8,
+    borderRadius: 18,
+    backgroundColor: Colors.tertiary,
   },
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
-  },
-  badgeRed: {
-    backgroundColor: Colors.errorSoft,
-  },
-  badgeGreen: {
-    backgroundColor: Colors.successSoft,
-  },
-  badgeTextRed: {
-    color: Colors.red,
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
-  badgeTextGreen: {
-    color: '#087443',
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
-  badgeOrange: {
-    backgroundColor: Colors.warningSoft,
-    borderColor: '#F97316',
-  },
-  badgeTextOrange: {
-    color: '#9A3412',
-    fontSize: 10,
-    fontWeight: 'bold',
+  apadrinarButtonText: {
+    color: Colors.greenPet,
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
 });
 

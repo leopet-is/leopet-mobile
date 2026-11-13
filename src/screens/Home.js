@@ -4,20 +4,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomHeader from '../components/Headers/CustomHeader';
 import Animales from '../components/Cards/CardAnimal';
 import { ActivityIndicator, TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
-import { CheckBox } from '@rneui/themed';
 
 // Servicios
 // Iconos
 import { Feather } from '@expo/vector-icons';
 import { getAnimalsApp } from '../services/Animals';
+import { isHighPriority, rankPets } from '../lib/recommendation';
 
 import {
   StyledSafeArea,
   InnerContainer,
   StyledScrollContainer,
   Colors,
-  ViewFiltro,
-  ViewFiltroButton,
 } from '../components/StyledComponents/styles';
 import { GLOBALCONFIG } from '../Config';
 
@@ -32,12 +30,7 @@ const Home = ({ navigation }) => {
   const [error, setError] = useState();
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Health Filters
-  const [noVacunado, setNoVacunado] = useState(false);
-  const [noEsterilizado, setNoEsterilizado] = useState(false);
-  const [noDesparasitado, setNoDesparasitado] = useState(false);
-  const [conEnfermedades, setConEnfermedades] = useState(false);
-  const [showHealthFilters, setShowHealthFilters] = useState(false);
+  const [urgencyOnly, setUrgencyOnly] = useState(false);
 
   // Cargar animales al renderizar el componente
   useEffect(() => {
@@ -47,6 +40,15 @@ const Home = ({ navigation }) => {
   }, [navigation]);
 
   const handleSearch = setSearchQuery;
+
+  const getRankedAnimals = (pets) =>
+    rankPets(
+      pets.map((animal) => ({
+        ...animal,
+        fechaRescate: animal.fechaRescate || animal.fecha_rescate,
+        fechaRegistro: animal.fechaRegistro || animal.fecha_registro,
+      })),
+    );
 
   const loadAnimals = async (page, reset) => {
     setError('');
@@ -62,17 +64,6 @@ const Home = ({ navigation }) => {
         { limit: 20, page },
         { apiUrl: uri, token: session.token },
       );
-      const hasHealthData = result.some((animal) =>
-        ['vacunacion', 'esterilizacion', 'desparasitacion', 'enfermedades'].some(
-          (field) => animal[field] !== undefined && animal[field] !== null,
-        ),
-      );
-      if (reset && !hasHealthData) {
-        setNoVacunado(false);
-        setNoEsterilizado(false);
-        setNoDesparasitado(false);
-        setConEnfermedades(false);
-      }
       setAnimals(reset ? result : [...animals, ...result]);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'No se pudieron cargar los animales.');
@@ -82,6 +73,7 @@ const Home = ({ navigation }) => {
   };
   const getFilteredAnimals = () => {
     let filtered = animals;
+    const rankedAnimals = urgencyOnly ? getRankedAnimals(animals) : [];
 
     if (tipoAnimal !== 'Todos') {
       filtered = filtered.filter(
@@ -96,28 +88,24 @@ const Home = ({ navigation }) => {
           .some((value) => value.toLowerCase().includes(query)),
       );
     }
-    if (noVacunado) {
-      filtered = filtered.filter((animal) => animal.vacunacion === false);
+    if (urgencyOnly) {
+      const rankedIds = new Set(
+        rankedAnimals.filter((animal) => isHighPriority(animal.score)).map((animal) => animal.id),
+      );
+      filtered = filtered.filter((animal) => rankedIds.has(animal.id));
     }
-    if (noEsterilizado) {
-      filtered = filtered.filter((animal) => animal.esterilizacion === false);
-    }
-    if (noDesparasitado) {
-      filtered = filtered.filter((animal) => animal.desparasitacion === false);
-    }
-    if (conEnfermedades) {
-      filtered = filtered.filter((animal) => {
-        const diseases = animal.enfermedades?.trim();
-        return diseases && !['ninguna', 'ninguno', 'no'].includes(diseases.toLowerCase());
-      });
+    if (urgencyOnly) {
+      const rankById = new Map(rankedAnimals.map((animal, index) => [animal.id, index]));
+      filtered = filtered
+        .filter((animal) => rankById.has(animal.id))
+        .sort((a, b) => rankById.get(a.id) - rankById.get(b.id));
     }
 
     return filtered;
   };
+  const filteredAnimals = getFilteredAnimals();
 
-  const loadAnimal = (navigation) => {
-    const filteredAnimals = getFilteredAnimals();
-
+  const loadAnimal = (navigation, filteredAnimals) => {
     if (filteredAnimals.length === 0 && !isLoading) {
       return (
         <View style={{ marginTop: 40, alignItems: 'center' }}>
@@ -163,6 +151,12 @@ const Home = ({ navigation }) => {
             fundacion={animal.fundacion}
             fundacion_id={animal.fundacion_id}
             navigation={navigation}
+            onApadrinar={() =>
+              navigation.navigate('AgregarAnimalManada', {
+                ...animal,
+                animalId: animal.id,
+              })
+            }
             raza={animal.raza}
             especie={animal.especie}
             isMenuManada={false}
@@ -193,126 +187,83 @@ const Home = ({ navigation }) => {
     setTipoAnimal('Gato');
   }
 
+  const speciesOptions = [
+    { key: 'Todos', label: 'Todos' },
+    { key: 'Perro', label: 'Perros' },
+    { key: 'Gato', label: 'Gatos' },
+  ];
+
   return (
     <StyledSafeArea>
       <CustomHeader isHome={true} title="Animales" color={Colors.primary} navigation={navigation} />
-      <ViewFiltro>
-        <ViewFiltroButton>
-          <TouchableOpacity
-            style={tipoAnimal === 'Todos' ? styles.filtroButtonPresionado : styles.filtroButton}
-            onPress={cargarTodos}
-          >
-            <Text style={tipoAnimal === 'Todos' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
-              Todos
-            </Text>
-          </TouchableOpacity>
-        </ViewFiltroButton>
-        <ViewFiltroButton>
-          <TouchableOpacity
-            style={tipoAnimal === 'Perro' ? styles.filtroButtonPresionado : styles.filtroButton}
-            onPress={cargarPerros}
-          >
-            <Text style={tipoAnimal == 'Perro' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
-              Perro
-            </Text>
-          </TouchableOpacity>
-        </ViewFiltroButton>
-        <ViewFiltroButton>
-          <TouchableOpacity
-            style={tipoAnimal === 'Gato' ? styles.filtroButtonPresionado : styles.filtroButton}
-            onPress={cargarGatos}
-          >
-            <Text style={tipoAnimal == 'Gato' ? styles.filtroTextButtonPresionado : styles.filtroTextButton}>
-              Gato
-            </Text>
-          </TouchableOpacity>
-        </ViewFiltroButton>
-      </ViewFiltro>
-
-      <View style={styles.searchContainer}>
-        <Feather name="search" size={20} color={Colors.gray} style={{ marginLeft: 15 }} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Buscar por nombre, especie..."
-          value={searchQuery}
-          onChangeText={handleSearch}
-          placeholderTextColor={Colors.gray}
-        />
+      <View style={styles.speciesRow}>
+        <View style={styles.speciesGroup} accessibilityLabel="Filtrar por especie">
+          {speciesOptions.map((option) => {
+            const active = tipoAnimal === option.key;
+            const onPress = {
+              Todos: cargarTodos,
+              Perro: cargarPerros,
+              Gato: cargarGatos,
+            }[option.key];
+            return (
+              <TouchableOpacity
+                key={option.key}
+                style={[styles.speciesButton, active && styles.speciesButtonActive]}
+                onPress={onPress}
+                accessibilityRole="button"
+                accessibilityState={{ selected: active }}
+              >
+                <Text style={[styles.speciesText, active && styles.speciesTextActive]}>
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
         <TouchableOpacity
-          style={{ paddingHorizontal: 15 }}
-          onPress={() => setShowHealthFilters(!showHealthFilters)}
+          style={[styles.urgencyButton, urgencyOnly && styles.urgencyButtonActive]}
+          onPress={() => setUrgencyOnly((previous) => !previous)}
+          accessibilityRole="button"
+          accessibilityLabel="Filtrar por mascotas urgentes"
+          accessibilityState={{ selected: urgencyOnly }}
         >
-          <Feather name="sliders" size={20} color={showHealthFilters ? Colors.greenPet : Colors.gray} />
+          <Feather
+            name="zap"
+            size={15}
+            color={urgencyOnly ? Colors.greenPet : '#f59e0b'}
+          />
+          <Text style={[styles.urgencyText, urgencyOnly && styles.urgencyTextActive]}>Urgente</Text>
         </TouchableOpacity>
       </View>
 
-      {showHealthFilters && (
-        <View style={styles.healthFiltersContainer}>
-          <Text style={styles.healthFiltersTitle}>Filtrar por Salud</Text>
-          {!animals.some((animal) =>
-            ['vacunacion', 'esterilizacion', 'desparasitacion', 'enfermedades'].some(
-              (field) => animal[field] !== undefined && animal[field] !== null,
-            ),
-          ) && (
-            <Text style={styles.healthFiltersNote}>
-              El listado no incluye datos de salud, por lo que estos filtros no están disponibles.
-            </Text>
+      <View style={styles.searchRow}>
+        <View style={styles.searchContainer}>
+          <Feather name="search" size={20} color={Colors.gray} style={{ marginLeft: 15 }} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar por nombre, especie..."
+            value={searchQuery}
+            onChangeText={handleSearch}
+            placeholderTextColor={Colors.gray}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setSearchQuery('')}
+              style={styles.clearSearchButton}
+              accessibilityRole="button"
+              accessibilityLabel="Borrar búsqueda"
+            >
+              <Feather name="x" size={16} color={Colors.gray} />
+            </TouchableOpacity>
           )}
-          <View style={styles.checkboxGrid}>
-            <View style={styles.checkboxWrapper}>
-              <CheckBox
-                title="No Vacunados"
-                checked={noVacunado}
-                onPress={() => setNoVacunado(!noVacunado)}
-                disabled={!animals.some((animal) => animal.vacunacion !== undefined && animal.vacunacion !== null)}
-                containerStyle={styles.checkboxContainer}
-                textStyle={styles.checkboxText}
-                checkedColor={Colors.greenPet}
-              />
-            </View>
-            <View style={styles.checkboxWrapper}>
-              <CheckBox
-                title="No Esterilizados"
-                checked={noEsterilizado}
-                onPress={() => setNoEsterilizado(!noEsterilizado)}
-                disabled={!animals.some((animal) => animal.esterilizacion !== undefined && animal.esterilizacion !== null)}
-                containerStyle={styles.checkboxContainer}
-                textStyle={styles.checkboxText}
-                checkedColor={Colors.greenPet}
-              />
-            </View>
-            <View style={styles.checkboxWrapper}>
-              <CheckBox
-                title="No Desparasitados"
-                checked={noDesparasitado}
-                onPress={() => setNoDesparasitado(!noDesparasitado)}
-                disabled={!animals.some((animal) => animal.desparasitacion !== undefined && animal.desparasitacion !== null)}
-                containerStyle={styles.checkboxContainer}
-                textStyle={styles.checkboxText}
-                checkedColor={Colors.greenPet}
-              />
-            </View>
-            <View style={styles.checkboxWrapper}>
-              <CheckBox
-                title="Con Enfermedades"
-                checked={conEnfermedades}
-                onPress={() => setConEnfermedades(!conEnfermedades)}
-                disabled={!animals.some((animal) => animal.enfermedades !== undefined && animal.enfermedades !== null)}
-                containerStyle={styles.checkboxContainer}
-                textStyle={styles.checkboxText}
-                checkedColor={Colors.greenPet}
-              />
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.filterSubmitButton}
-            onPress={() => setShowHealthFilters(false)}
-          >
-            <Feather name="filter" size={16} color={Colors.tertiary} />
-            <Text style={styles.filterSubmitText}>Filtrar</Text>
-          </TouchableOpacity>
         </View>
-      )}
+      </View>
+      <View style={styles.resultsSummary}>
+        <Text style={styles.resultsText}>
+          Mostrando <Text style={styles.resultsCount}>{filteredAnimals.length}</Text> mascotas
+          {urgencyOnly ? ' (solo casos prioritarios)' : ''}
+        </Text>
+      </View>
       <StyledScrollContainer contentContainerStyle={{ paddingBottom: 20 }}>
         <InnerContainer>
           <StatusBar style="dark" />
@@ -329,7 +280,7 @@ const Home = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           ) : (
-            loadAnimal(navigation)
+            loadAnimal(navigation, filteredAnimals)
           )}
           {/* {isTipoAnimal ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadTipoAnimal(navigation,especieAnimal)} */}
           {/*  <StyledButtonMedio onPress={logout}>
@@ -342,41 +293,78 @@ const Home = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  filtroButton: {
-    flex: 1,
-    height: 45,
+  speciesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 6,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  speciesGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 4,
+    backgroundColor: '#eef0f0',
+    borderRadius: 24,
+  },
+  speciesButton: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: 'transparent',
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
-  filtroButtonPresionado: {
-    flex: 1,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: Colors.greenPet,
+  speciesButtonActive: {
+    backgroundColor: Colors.tertiary,
+    elevation: 2,
   },
-
-  filtroTextButton: {
-    fontWeight: 'bold',
-    color: Colors.gray,
-    fontSize: 16,
-  },
-
-  filtroTextButtonPresionado: {
-    fontWeight: 'bold',
+  speciesText: {
     color: Colors.tertiary,
-    fontSize: 16,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  speciesTextActive: {
+    color: Colors.primary,
+  },
+  urgencyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 22,
+    backgroundColor: Colors.primary,
+  },
+  urgencyButtonActive: {
+    backgroundColor: Colors.tertiary,
+    borderColor: Colors.greenPet,
+  },
+  urgencyText: {
+    color: Colors.tertiary,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  urgencyTextActive: {
+    color: Colors.greenPet,
+  },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 15,
+    marginBottom: 10,
   },
   searchContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.primary,
-    borderRadius: 25,
-    marginHorizontal: 15,
-    marginBottom: 10,
+    borderRadius: 18,
     height: 45,
     borderWidth: 1,
     borderColor: Colors.border,
@@ -387,44 +375,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.tertiary,
   },
-  healthFiltersContainer: {
-    backgroundColor: Colors.primary,
-    marginHorizontal: 15,
-    marginBottom: 15,
-    padding: 15,
-    borderRadius: 15,
-    elevation: 2,
+  clearSearchButton: {
+    padding: 8,
   },
-  healthFiltersTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: Colors.tertiary,
-    marginBottom: 10,
+  resultsSummary: {
+    marginHorizontal: 18,
+    marginBottom: 4,
   },
-  healthFiltersNote: {
+  resultsText: {
     color: Colors.gray,
-    fontSize: 13,
-    marginBottom: 10,
-  },
-  checkboxGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  checkboxWrapper: {
-    width: '48%',
-  },
-  checkboxContainer: {
-    backgroundColor: 'transparent',
-    borderWidth: 0,
-    padding: 0,
-    marginLeft: 0,
-    marginVertical: 5,
-  },
-  checkboxText: {
     fontSize: 12,
-    fontWeight: 'normal',
-    color: Colors.gray,
+  },
+  resultsCount: {
+    color: Colors.tertiary,
+    fontWeight: 'bold',
   },
   filterSubmitButton: {
     backgroundColor: Colors.greenPet,
