@@ -3,9 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Tabs
 //Screens
-import AddAnimal from '../screens/AddAnimal';
+import AgregarAnimalManada from '../screens/AgregarAnimalManada';
 import Confirmation from '../screens/Confirmacion';
 import CrearManada from '../screens/CrearManada';
+import AgregarMiembrosManada from '../screens/AgregarMiembrosManada';
 import Home from '../screens/Home';
 import AnimalApadrinado from '../screens/AnimalApadrinado';
 import Suscripcion from '../screens/Suscripcion';
@@ -38,8 +39,9 @@ const HomeStack = () => {
     >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Detalle de Animal" component={AnimalDetalle} />
-      <Stack.Screen name="Agregar A Manada" component={AddAnimal} />
+      <Stack.Screen name="AgregarAnimalManada" component={AgregarAnimalManada} />
       <Stack.Screen name="Crear Manada" component={CrearManada} />
+      <Stack.Screen name="AgregarMiembrosManada" component={AgregarMiembrosManada} />
       <Stack.Screen name="Confirmar" component={Confirmation} />
       <Stack.Screen name="Suscripcion" component={Suscripcion} />
       <Stack.Screen name="Suscripciontarjeta" component={Suscripciontarjeta} />

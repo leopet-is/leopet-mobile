@@ -9,6 +9,7 @@ import {
   InnerContainer,
   Colors,
 } from '../components/StyledComponents/styles';
+import { getAnimalImageUri } from '../utils/animalImage';
 
 const AnimalDetalle = ({ route, navigation }) => {
   const {
@@ -29,8 +30,10 @@ const AnimalDetalle = ({ route, navigation }) => {
     fecha_rescate,
     sexo,
     galeria,
+    fromManada = false,
   } = route.params;
   const edad = getAge(fecha_nacimiento_estimada);
+  const imageUri = getAnimalImageUri({ imagen, galeria });
 
   return (
     <StyledSafeArea style={{ backgroundColor: Colors.primary }}>
@@ -41,22 +44,26 @@ const AnimalDetalle = ({ route, navigation }) => {
 
         {/* Animal Image */}
         <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: (galeria && galeria.fotos && galeria.fotos[0]) || imagen }}
-            style={styles.mainImage}
-            resizeMode="cover"
-          />
+          {imageUri ? (
+            <Image source={{ uri: imageUri }} style={styles.mainImage} resizeMode="cover" />
+          ) : (
+            <View style={styles.imagePlaceholder}>
+              <Ionicons name="paw" size={52} color={Colors.greenPet} />
+            </View>
+          )}
         </View>
 
         <InnerContainer style={{ paddingHorizontal: 20 }}>
           <View style={styles.headerInfo}>
             <Text style={styles.animalName}>{nombre}</Text>
-            <TouchableOpacity
-              style={styles.adoptButton}
-              onPress={() => navigation.navigate('Agregar A Manada', { animalId, nombre, descripcion, imagen, fundacion, raza, especie, galeria })}
-            >
-              <Text style={styles.adoptButtonText}>Apadrinar</Text>
-            </TouchableOpacity>
+            {!fromManada ? (
+              <TouchableOpacity
+                style={styles.adoptButton}
+                onPress={() => navigation.navigate('AgregarAnimalManada', { animalId, nombre, descripcion, imagen, fundacion, raza, especie, galeria })}
+              >
+                <Text style={styles.adoptButtonText}>Apadrinar</Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           {/* Info Sections */}
@@ -188,6 +195,12 @@ const styles = StyleSheet.create({
   mainImage: {
     width: '100%',
     height: '100%',
+  },
+  imagePlaceholder: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.secondary,
   },
   headerInfo: {
     flexDirection: 'row',

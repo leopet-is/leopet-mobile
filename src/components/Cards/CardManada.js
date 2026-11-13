@@ -9,12 +9,15 @@ const CardManada = ({
   nombre,
   monto,
   id_manada,
+  manadaId,
+  id,
   apadrinados,
   navigation,
   isMenu,
   eliminarManada,
 }) => {
   const [visible, setVisible] = useState(false);
+  const resolvedManadaId = id_manada ?? manadaId ?? id;
 
   const mostarVentanaConfirmacion = () => {
     setVisible(true);
@@ -26,10 +29,10 @@ const CardManada = ({
 
   const aceptarEliminacion = () => {
     setVisible(false);
-    eliminarManada(id_manada);
+    eliminarManada(resolvedManadaId);
   };
 
-  const totalMensual = (monto * apadrinados).toFixed(2);
+  const totalMensual = (Number(monto || 0) * Number(apadrinados || 0)).toFixed(2);
 
   return (
     <Card containerStyle={styles.cardContainer}>
@@ -40,20 +43,22 @@ const CardManada = ({
         </View>
 
         <View style={styles.actionGroup}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('Crear Manada', {
-                isMenu,
-                isEditar: true,
-                id_manada: id_manada,
-                nombre: nombre,
-                monto: monto,
-              })
-            }
-            style={styles.iconButton}
-          >
-            <Octicons name="pencil" size={18} color={Colors.gray} />
-          </TouchableOpacity>
+          {isMenu === 'MANADAS' && (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditarManada', {
+                  id_manada: resolvedManadaId,
+                  manadaId: resolvedManadaId,
+                  nombre,
+                  monto,
+                })
+              }
+              style={styles.iconButton}
+              accessibilityLabel="Editar manada"
+            >
+              <Octicons name="pencil" size={18} color={Colors.gray} />
+            </TouchableOpacity>
+          )}
 
           {isMenu == 'MANADAS' && (
             <TouchableOpacity onPress={mostarVentanaConfirmacion} style={styles.iconButton}>
@@ -78,13 +83,22 @@ const CardManada = ({
         </View>
       </View>
 
-      <TouchableOpacity
-        style={styles.detailsButton}
-        onPress={() => {/* Navegar a animales de la manada si existe la ruta */ }}
-      >
-        <Text style={styles.detailsButtonText}>Ver animales de esta manada</Text>
-        <Ionicons name="chevron-forward" size={16} color={Colors.greenPet} />
-      </TouchableOpacity>
+      {isMenu === 'MANADAS' && (
+        <TouchableOpacity
+          style={styles.detailsButton}
+          onPress={() =>
+            navigation.navigate('Ver Manada', {
+              manadaId: resolvedManadaId,
+              monto,
+              nombre,
+              apadrinados,
+            })
+          }
+        >
+          <Text style={styles.detailsButtonText}>Ver animales de esta manada</Text>
+          <Ionicons name="chevron-forward" size={16} color={Colors.greenPet} />
+        </TouchableOpacity>
+      )}
 
       <VentanaConfirmacion
         visible={visible}
@@ -112,17 +126,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 14,
   },
   titleGroup: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   nombre: {
     fontSize: 20,
     fontWeight: 'bold',
     color: Colors.tertiary,
     marginLeft: 10,
+    flexShrink: 1,
   },
   actionGroup: {
     flexDirection: 'row',

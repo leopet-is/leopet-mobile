@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
+import { View, ActivityIndicator, Text } from 'react-native';
 import CustomHeader from '../components/Headers/CustomHeader';
 import { StatusBar } from 'expo-status-bar';
 import Animales from '../components/Cards/CardAnimal';
@@ -18,8 +18,6 @@ import {
   PageTitle,
   Subtitle,
   StyledScrollContainer,
-  StyledButtonMedio,
-  ButtonText,
   ExtraView,
   TextInfo,
   Colors,
@@ -62,7 +60,6 @@ const AnimalesManada = ({ route, navigation }) => {
     )
       .then((data) => {
         setAnimals(reset ? data : [...animals, ...data]);
-        console.log(data);
         if (reset) {
           setLoading(false);
         }
@@ -76,22 +73,6 @@ const AnimalesManada = ({ route, navigation }) => {
         setLoading(false);
       });
   };
-  /*  const loadAnimal = () => {
-    return animals.map((animal) => {
-        return (
-          <Animales
-            key={animal.id}
-            id={animal.id}
-            nombre={animal.nombre}
-            descripcion={animal.descripcion}
-            imagen={animal.imagen}
-            fundacion={animal.fundacion}
-            navigation={navigation}
-          />
-        );
-    });
-  }; */
-
   const eliminarAnimalManada = async (id) => {
     const jsonValue = await AsyncStorage.getItem('session');
     const data = await JSON.parse(jsonValue);
@@ -119,8 +100,20 @@ const AnimalesManada = ({ route, navigation }) => {
   const loadAnimal = (navigation) => {
     return animals.map((animal) => {
       return (
-        <TouchableOpacity
+        <Animales
           key={animal.id}
+          id={animal.id}
+          nombre={animal.nombre}
+          descripcion={animal.descripcion}
+          imagen={animal.imagen}
+          fundacion={animal.fundacion}
+          navigation={navigation}
+          raza={animal.raza}
+          especie={animal.especie}
+          fundacion_id={animal.fundacion_id}
+          galeria={animal.galeria}
+          isMenuManada={true}
+          eliminarAnimalManada={eliminarAnimalManada}
           onPress={() =>
             navigation.navigate('Detalle de Animal', {
               animalId: animal.id,
@@ -128,27 +121,22 @@ const AnimalesManada = ({ route, navigation }) => {
               descripcion: animal.descripcion,
               imagen: animal.imagen,
               fundacion: animal.fundacion,
+              fundacion_id: animal.fundacion_id ?? animal.fundacionId,
               raza: animal.raza,
               especie: animal.especie,
               galeria: animal.galeria,
+              fecha_nacimiento_estimada: animal.fecha_nacimiento_estimada,
+              peso: animal.peso,
+              esterilizacion: animal.esterilizacion,
+              vacunacion: animal.vacunacion,
+              desparasitacion: animal.desparasitacion,
+              enfermedades: animal.enfermedades,
+              fecha_rescate: animal.fecha_rescate,
+              sexo: animal.sexo,
+              fromManada: true,
             })
           }
-        >
-          <Animales
-            id={animal.id}
-            nombre={animal.nombre}
-            descripcion={animal.descripcion}
-            imagen={animal.imagen}
-            fundacion={animal.fundacion}
-            navigation={navigation}
-            raza={animal.raza}
-            especie={animal.especie}
-            fundacion_id={animal.fundacion_id}
-            galeria={animal.galeria}
-            isMenuManada={true}
-            eliminarAnimalManada={eliminarAnimalManada}
-          />
-        </TouchableOpacity>
+        />
       );
     });
   };
@@ -164,11 +152,7 @@ const AnimalesManada = ({ route, navigation }) => {
           <Subtitle>Monto: $ {monto}</Subtitle>
           <Subtitle>Suscripcion Mensual: $ {monto * apadrinados}</Subtitle>
           <TextInfo>Estos son los animales que pertenecen a tu manada</TextInfo>
-          <StyledButtonMedio onPress={() => navigation.navigate('Suscripcion')}>
-            <ButtonText>Activar donación</ButtonText>
-          </StyledButtonMedio>
           <Divider />
-          {/*   {isLoading ? <ActivityIndicator size="large" color={Colors.darklight} /> : loadAnimal()} */}
           {isLoading ? (
             <ActivityIndicator size="large" color={Colors.darklight} />
           ) : error ? (

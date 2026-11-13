@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, TouchableOpacity  } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import CustomHeader from '../components/Headers/CustomHeader';
 import { StatusBar } from 'expo-status-bar';
 
-import { Divider, Card  } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -40,9 +39,15 @@ const HomeScreen = ({ navigation }) => {
 
   const loadManadas = async (page, reset, cb) => {
     const jsonValue = await AsyncStorage.getItem('session');
-    const data = await JSON.parse(jsonValue);
+    const data = jsonValue ? JSON.parse(jsonValue) : null;
     if (reset) {
       setLoading(true);
+      setError(false);
+    }
+    if (!data?.token) {
+      setError('Tu sesión expiró. Inicia sesión nuevamente.');
+      setLoading(false);
+      return;
     }
     return getManadas(
       {
@@ -73,7 +78,11 @@ const HomeScreen = ({ navigation }) => {
 
   const eliminarManada = async (id_manada) => {
     const jsonValue = await AsyncStorage.getItem('session');
-    const data = await JSON.parse(jsonValue);
+    const data = jsonValue ? JSON.parse(jsonValue) : null;
+    if (!data?.token) {
+      setError('Tu sesión expiró. Inicia sesión nuevamente.');
+      return;
+    }
     return deleteAllAnimalsManadaApp(
       {
         manadaId: id_manada,
@@ -96,32 +105,19 @@ const HomeScreen = ({ navigation }) => {
 
   const loadManada = () => {
     return manadas.map((manada) => {
+      const manadaId = manada.id ?? manada.id_manada ?? manada.manadaId;
       return (
-        <TouchableOpacity
-          key={manada.id}
-          onPress={() =>
-            navigation.navigate('Ver Manada', {
-              manadaId: manada.id,
-              monto: manada.monto,
-              nombre: manada.nombre,
-              galeriamanada: manada.galeriamanada,
-              apadrinados: manada.apadrinados,
-              prueba: 6,
-            })
-          }
-        >
-          <CardManada
-            key={manada.id}
-            nombre={manada.nombre}
-            galeriamanada={manada.galeriamanada}
-            monto={manada.monto}
-            id_manada={manada.id}
-            apadrinados={manada.apadrinados}
-            navigation={navigation}
-            isMenu="MANADAS"
-            eliminarManada={eliminarManada}
-          />
-        </TouchableOpacity>
+        <CardManada
+          key={manadaId}
+          nombre={manada.nombre}
+          galeriamanada={manada.galeriamanada}
+          monto={manada.monto}
+          id_manada={manadaId}
+          apadrinados={manada.apadrinados}
+          navigation={navigation}
+          isMenu="MANADAS"
+          eliminarManada={eliminarManada}
+        />
       );
     });
   };
@@ -131,10 +127,19 @@ const HomeScreen = ({ navigation }) => {
       <StyledScrollContainer>
         <InnerContainer>
           <StatusBar style="dark" />
-          {/* <PageTitle>LEOPET</PageTitle>
-          <TextInfo>Aqui puedes ver tus manadas y crear manadas</TextInfo> */}
-
           <TouchableOpacity
+            style={{
+              alignSelf: 'flex-end',
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: Colors.greenPet,
+              borderRadius: 12,
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+              marginHorizontal: 16,
+              marginTop: 16,
+              marginBottom: 8,
+            }}
             onPress={() =>
               navigation.navigate('Crear Manada', {
                 isMenu: 'HOME',
@@ -142,37 +147,25 @@ const HomeScreen = ({ navigation }) => {
               })
             }
           >
-            <Card
-              containerStyle={{
-                width: 370,
-                height: 180,
-                borderRadius: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Ionicons
-                name="add-circle"
-                justifyContent="center"
-                alignItems="center"
-                size={130}
-                color={Colors.pinkPet}
-              />
-              <Text
-                style={{ color: Colors.greenPet, fontSize: 18, margin: -10, fontWeight: 'bold', textAlign: 'center' }}
-              >
-                Crear manada
-              </Text>
-            </Card>
+            <Ionicons name="add" size={20} color={Colors.primary} />
+            <Text style={{ color: Colors.primary, fontSize: 14, fontWeight: 'bold', marginLeft: 5 }}>
+              Crear manada
+            </Text>
           </TouchableOpacity>
 
-          <Divider />
+          <Text style={{ alignSelf: 'flex-start', color: Colors.tertiary, fontSize: 22, fontWeight: 'bold', marginHorizontal: 18, marginVertical: 8 }}>
+            Tus manadas
+          </Text>
           {isLoading ? (
             <ActivityIndicator size="large" color={Colors.darklight} />
           ) : error ? (
             <Text style={{ color: Colors.red, textAlign: 'center', margin: 20 }}>{error}</Text>
-          ) : (
+          ) : manadas.length ? (
             loadManada()
+          ) : (
+            <Text style={{ color: Colors.gray, textAlign: 'center', margin: 24 }}>
+              Todavía no tienes manadas. Crea una para comenzar.
+            </Text>
           )}
           <View style={{ marginBottom: 30 }}></View>
         </InnerContainer>

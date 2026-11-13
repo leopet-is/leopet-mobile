@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'react-native';
 
 
-import Perfil from '../screens/Perfil';
+import PerfilStack from './PerfilStack';
 import ManadaStack from './ManadaStack';
 import HomeStack from './HomeStack';
 import FundacionStack from './FundacionStack';
@@ -52,7 +52,7 @@ export default function HomeTab() {
       <Tab.Screen name="Animales" component={HomeStack} />
       <Tab.Screen name="Manadas" component={ManadaStack} />
       <Tab.Screen name="Fundación" component={FundacionStack} />
-      <Tab.Screen name="Perfil" component={Perfil} />
+      <Tab.Screen name="Perfil" component={PerfilStack} />
     </Tab.Navigator>
   );
 }

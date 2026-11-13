@@ -70,7 +70,7 @@ const Confirmacion = ({ route, navigation }) => {
             Presiona 'APADRINAR' si quiere agregar a {nombre} a la manada, caso contrario presiona en 'CANCELAR'
           </TextInfo> */}
           <Text style={{ color: Colors.greenPet, fontSize: 20, margin: 20, fontWeight: 'bold', letterSpacing: 1 }}>
-            ¿Desea apadrinar a {nombre} ?
+            ¿Deseas agregar a {nombre} a esta manada?
           </Text>
           <Animales
             nombre={nombre}
@@ -93,7 +93,7 @@ const Confirmacion = ({ route, navigation }) => {
             {isLoading ? (
               <ActivityIndicator color={Colors.primary} />
             ) : (
-              <ButtonText>Apadrinar</ButtonText>
+              <ButtonText>Agregar a la manada</ButtonText>
             )}
           </StyledButtonMedio>
         </View>
