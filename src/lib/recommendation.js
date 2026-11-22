@@ -11,7 +11,7 @@
  * Solo mascotas `visible === true` y `status !== "ADOPTADO"` se muestran en el catálogo principal.
  */
 
-const TODAY = new Date("2026-07-25");
+
 
 function daysBetween(dateStr) {
   const d = new Date(dateStr);
